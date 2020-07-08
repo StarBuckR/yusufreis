@@ -19,7 +19,7 @@ class TrayIcon(Gtk.StatusIcon):
         self.connect("popup_menu", self.on_secondary_click)
         self.connect("activate", self.on_click)
 
-    def on_click(button, time):
+    def on_click(self, button, time):
         print("Left click")
 
     def on_secondary_click(self, widget, button, time):
