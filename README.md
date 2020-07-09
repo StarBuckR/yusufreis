@@ -7,6 +7,7 @@
 * [pyscreenshot](https://pypi.org/project/pyscreenshot/)
 
 # Run
- `
- python3 tray.py
- `
+ ```
+ LANGUAGE=tr python3 tray.py
+ 
+ ```
