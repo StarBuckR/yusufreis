@@ -5,11 +5,16 @@
 
 import gi
 gi.require_version("Gtk", "3.0")
-from gi.repository import Gtk
+from gi.repository import Gtk, GdkPixbuf
+
+import pyscreenshot as ImageGrab
+
+import gui
 
 class TrayIcon(Gtk.StatusIcon):
     def __init__(self):
         Gtk.StatusIcon.__init__(self)
+
         self.set_from_icon_name('help-about')
 
         self.set_tooltip_text("Tray Icon")
@@ -19,26 +24,33 @@ class TrayIcon(Gtk.StatusIcon):
         self.connect("popup_menu", self.on_secondary_click)
         self.connect("activate", self.on_click)
 
-    def on_click(self, button, time):
-        print("Left click")
+
+        self.menu = Gtk.Menu()
+
+        self.menu_item1 = Gtk.MenuItem("Send")
+        self.menu_item1.connect("activate", self.on_send_click)
+        self.menu.append(self.menu_item1)
+
+        self.menu_item2 = Gtk.MenuItem("Quit")
+        self.menu.append(self.menu_item2)
+        self.menu_item2.connect("activate", Gtk.main_quit)
+
+    def on_click(button, time):
+        print("Left clicked")
 
     def on_secondary_click(self, widget, button, time):
-        menu = Gtk.Menu()
+        self.menu.show_all()
+        self.menu.popup(None, None, None, self, 3, time)
 
-        menu_item1 = Gtk.MenuItem("Send")
-        menu_item1.connect("activate", self.on_send_click)
-        menu.append(menu_item1)
+    def on_send_click(self, button):
+        print("Send clicked")
 
-        menu_item2 = Gtk.MenuItem("Quit")
-        menu.append(menu_item2)
-        menu_item2.connect("activate", Gtk.main_quit)
+        image = ImageGrab.grab()
+        image.save('image.jpg')
 
-        menu.show_all()
-        menu.popup(None, None, None, self, 3, time)
-    
-    def on_send_click(button, time):
-        print("Send click")
-    
+        self.gui_window = gui.Window()
+        self.gui_window.display_image()
+
 if __name__ == '__main__':
     tray = TrayIcon()
 
