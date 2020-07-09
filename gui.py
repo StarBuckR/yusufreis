@@ -21,17 +21,17 @@ class Window(Gtk.Builder):
         self.window.connect("destroy", self.on_destroy)
         #self.window.show_all()
 
-    def display_image(self):
-        pixbuf = GdkPixbuf.Pixbuf.new_from_file('image.jpg')
+    def show_popup_window(self):
+        # pixbuf = GdkPixbuf.Pixbuf.new_from_file('image.jpg')
 
-        height = pixbuf.get_height() / 1.7
-        width = pixbuf.get_width() / 1.7
-        pixbuf = pixbuf.scale_simple(width, height, GdkPixbuf.InterpType.BILINEAR)
+        # height = pixbuf.get_height() / 1.7
+        # width = pixbuf.get_width() / 1.7
+        # pixbuf = pixbuf.scale_simple(width, height, GdkPixbuf.InterpType.BILINEAR)
 
-        image = Gtk.Image()
-        image.set_from_pixbuf(pixbuf)
+        # image = Gtk.Image()
+        # image.set_from_pixbuf(pixbuf)
 
-        self.image_window.set_from_pixbuf(pixbuf)
+        # self.image_window.set_from_pixbuf(pixbuf)
         self.window.show_all()
 
     def on_send_clicked(self, button):

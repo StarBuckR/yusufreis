@@ -49,7 +49,7 @@ class TrayIcon(Gtk.StatusIcon):
         image.save('image.jpg')
 
         self.gui_window = gui.Window()
-        self.gui_window.display_image()
+        self.gui_window.show_popup_window()
 
 if __name__ == '__main__':
     tray = TrayIcon()
