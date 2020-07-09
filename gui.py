@@ -5,13 +5,24 @@ from gi.repository import Gtk, Gio, GdkPixbuf, Gdk
 import requests
 import subprocess
 
+import gettext
+
+el = gettext.translation('base', 'locale', fallback=True)
+el.install()
+_ = el.gettext
+
 class Window(Gtk.Builder):
     def __init__(self):
         Gtk.Builder.__init__(self)
         builder = Gtk.Builder()
         builder.add_from_file("popup.glade")
 
+        note_label = builder.get_object("note")
+        note_label.set_label(_("Note"))
+
         send_button = builder.get_object("send_button")
+        send_button.set_label(_("Send"))
+
         self.image_window = builder.get_object("image")
         self.textview = builder.get_object("textview")
         
@@ -19,7 +30,6 @@ class Window(Gtk.Builder):
         
         self.window = builder.get_object("popup_window")
         self.window.connect("destroy", self.on_destroy)
-        #self.window.show_all()
 
     def show_popup_window(self):
         # pixbuf = GdkPixbuf.Pixbuf.new_from_file('image.jpg')
