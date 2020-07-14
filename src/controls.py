@@ -22,7 +22,7 @@ from socket import AF_INET, SOCK_DGRAM
 import socket
 import struct, time
 
-el = gettext.translation('base', '../locale', fallback=True)
+el = gettext.translation('base', 'locale', fallback=True)
 el.install()
 _ = el.gettext
 

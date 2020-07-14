@@ -9,7 +9,7 @@ import pyscreenshot as ImageGrab
 import gui, message, summary, controls
 import subprocess, gettext, sys
 
-el = gettext.translation('base', '../locale', fallback=True)
+el = gettext.translation('base', 'locale', fallback=True)
 el.install()
 _ = el.gettext
 

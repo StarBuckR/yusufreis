@@ -7,7 +7,7 @@ import subprocess
 
 import gettext
 
-el = gettext.translation('base', '../locale', fallback=True)
+el = gettext.translation('base', 'locale', fallback=True)
 el.install()
 _ = el.gettext
 

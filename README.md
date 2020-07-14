@@ -8,6 +8,6 @@
 
 # Run
  ```
- LANGUAGE=tr python3 tray.py
+ LANGUAGE=tr python3 src/tray.py
  
  ```
