@@ -1,42 +1,79 @@
-# English translations for PACKAGE package.
-# Copyright (C) 2020 THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# StarBuck <starbuck@pardus>, 2020.
+# Turkish translations for migtest package
+# migtest paketi için Türkçe çeviriler.
+# Copyright (C) 2020 THE migtest'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the migtest package.
+# Administrator <administrator@pardus.migtest2.lab>, 2020.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: migtest 2.lab\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-09 16:47+0300\n"
-"PO-Revision-Date: 2020-07-09 16:49+0300\n"
-"Last-Translator: StarBuck <starbuck@pardus>\n"
-"Language-Team: English\n"
-"Language: en_US\n"
+"POT-Creation-Date: 2020-07-14 13:18+0300\n"
+"PO-Revision-Date: 2020-07-14 13:18+0300\n"
+"Last-Translator: Administrator <administrator@pardus.migtest2.lab>\n"
+"Language-Team: Turkish\n"
+"Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: tray.py:23
+#: tray.py:21
 msgid "Tray Icon"
-msgstr "Tray Icon"
+msgstr "Tray Menu"
 
-#: tray.py:32 gui.py:24
+#: tray.py:30
+msgid "Summary"
+msgstr "Özet"
+
+#: tray.py:34 gui.py:24 gui.py:32
 msgid "Send"
 msgstr "Gönder"
 
-#: tray.py:36
+#: tray.py:38
 msgid "Quit"
 msgstr "Çıkış"
 
-#: tray.py:41
+#: tray.py:43
 msgid "Left clicked"
 msgstr "Sol tıklandı"
 
-#: tray.py:48
+#: tray.py:53
 msgid "Send clicked"
 msgstr "Gönder tıklandı"
 
 #: gui.py:21
 msgid "Note"
 msgstr "Not"
+
+#: summary.py:107
+msgid "Settings"
+msgstr "Ayarlar"
+
+#: summary.py:119
+msgid "OS:"
+msgstr "İşletim Sistemi:"
+
+#: summary.py:126
+msgid "CPU:"
+msgstr "İşlemci:"
+
+#: summary.py:133
+msgid "RAM:"
+msgstr "RAM:"
+
+#: summary.py:142
+msgid "Domain could not found"
+msgstr "Domain bulunamadı"
+
+#: summary.py:146
+msgid "Domain:"
+msgstr "Domain:"
+
+#: summary.py:153
+msgid "Workgroup could not found"
+msgstr "Workgroup bulunamadı"
+
+#: summary.py:157
+msgid "Workgroup:"
+msgstr "Workgroup:"

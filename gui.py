@@ -29,6 +29,7 @@ class Window(Gtk.Builder):
         send_button.connect("clicked", self.on_send_clicked)
         
         self.window = builder.get_object("popup_window")
+        self.window.set_title(_("Send"))
         self.window.connect("destroy", self.on_destroy)
 
     def show_popup_window(self):
@@ -77,4 +78,3 @@ if __name__ == "__main__":
     window = Window()
 
     Gtk.main()
-
