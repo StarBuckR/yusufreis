@@ -18,6 +18,7 @@ import subprocess
 
 import gettext
 import locale
+import controls
 
 el = gettext.translation('base', 'locale', fallback=True)
 el.install()
@@ -32,56 +33,30 @@ ICONLocal = os.path.join(MAINDIR+"images/", 'Local-icon.png')
 
 
 def getDomain():
-    cmd_domainname = "net ads info 2> /dev/null | grep Realm | cut -d':' -f2 | tr -d ' ' | tr -d '\n'"
-    domainname = subprocess.check_output((cmd_domainname), shell=True)
-    domainname = domainname.decode('UTF-8')
-    return(domainname)
-
+    return controls.execute("net ads info 2> /dev/null | grep Realm | cut -d':' -f2 | tr -d ' ' | tr -d '\n'")
+    # cmd_domainname = "net ads info 2> /dev/null | grep Realm | cut -d':' -f2 | tr -d ' ' | tr -d '\n'"
+    # domainname = subprocess.check_output((cmd_domainname), shell=True)
+    # domainname = domainname.decode('UTF-8')
+    # return(domainname)
 
 def getWorkgroup():
-    command = "net ads workgroup | cut -d':' -f2 | tr -d ' ' | tr -d '\n'"
-    proc = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True)
-    (workgroupname, err) = proc.communicate()
-    workgroupname = workgroupname.decode('UTF-8')
-    return(workgroupname)
-
+    return controls.execute("net ads workgroup | cut -d':' -f2 | tr -d ' ' | tr -d '\n'")
 
 def getHostname():
-    command = "hostname | tr -d '\n'"
-    proc = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True)
-    (hostname, err) = proc.communicate()
-    hostname = hostname.decode('UTF-8')
-    return(hostname)
-
+    return controls.execute("hostname | tr -d '\n'")
 
 def getCPU():
-    command = "lscpu | grep 'Model name:' | cut -d':' -f2 | sed -e 's/^[[:space:]]*//'| tr -d '\n'"
-    proc = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True)
-    (cpumodel, err) = proc.communicate()
-    cpumodel = cpumodel.decode('UTF-8')
-    command = "lscpu | grep '^CPU(s):' | cut -d':' -f2 | sed -e 's/^[[:space:]]*//'| tr -d '\n'"
-    proc = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True)
-    (cpucore, err) = proc.communicate()
-    cpucore = cpucore.decode('UTF-8')
-    return(cpumodel+" - "+cpucore)
-
+    cpumodel = controls.execute("lscpu | grep 'Model name:' | cut -d':' -f2 | sed -e 's/^[[:space:]]*//'| tr -d '\n'")
+    cpucore = controls.execute("lscpu | grep '^CPU(s):' | cut -d':' -f2 | sed -e 's/^[[:space:]]*//'| tr -d '\n'")
+    return(cpumodel + " - " + cpucore)
 
 def getRAM():
-    command = "awk '/MemTotal/ {print $2}' /proc/meminfo"
-    proc = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True)
-    (memory, err) = proc.communicate()
-    memory = memory.decode('UTF-8')
+    memory = controls.execute("awk '/MemTotal/ {print $2}' /proc/meminfo")
     memory = round(int(memory)/1024/1000, 2)
     return(str(memory)+" GB")
 
-
 def getDist():
-    command = "lsb_release -ir | cut -d':' -f2| sed -e 's/^[[:space:]]*//'| tr '\n' ' '"
-    proc = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True)
-    (dist, err) = proc.communicate()
-    dist = dist.decode('UTF-8')
-    return(dist)
-
+    return controls.execute("lsb_release -ir | cut -d':' -f2| sed -e 's/^[[:space:]]*//'| tr '\n' ' '")
 
 class Summary(object):
     def __init__(self):

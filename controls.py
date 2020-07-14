@@ -27,42 +27,35 @@ el.install()
 _ = el.gettext
 
 
+def execute(command):
+    try:
+        proc = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True)
+        (dist, err) = proc.communicate()
+        dist = dist.decode('UTF-8')
+        return(dist.strip())
+    except:
+        return("")
+
 def getUsername():
-    return subprocess.getoutput("whoami")
+    return execute("whoami")
 
 def getBaseDir():
-    return subprocess.getoutput("getent passwd " + getUsername() + " | awk -F: ' { print $6} '")
+    return execute("getent passwd " + getUsername() + " | awk -F: ' { print $6} '")
 
 def getDomainName():
-    return subprocess.getoutput("dnsdomainname")
+    return execute("dnsdomainname")
 
 def getPing():
-    command = "ping -c 1 " + getDomainName()
-    proc = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True)
-    (dist, err) = proc.communicate()
-    dist = dist.decode('UTF-8')
-    return(dist)
+    return execute("ping -c 1 " + getDomainName())
 
 def getHost():
-    command = "host " + getDomainName()
-    proc = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True)
-    (dist, err) = proc.communicate()
-    dist = dist.decode('UTF-8')
-    return(dist)
+    return execute("host " + getDomainName())
 
-def getsssd():
-    command = "klist"
-    proc = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True)
-    (dist, err) = proc.communicate()
-    dist = dist.decode('UTF-8')
-    return(dist)
+def getKlist():
+    return execute("klist")
 
 def getLDAP():
-    command = "net ads info 2>/dev/null | grep 'LDAP server name' | awk -F: '{print $2}'"
-    proc = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True)
-    (dist, err) = proc.communicate()
-    print(err)
-    return(dist.strip())
+    return execute("net ads info 2>/dev/null | grep 'LDAP server name' | awk -F: '{print $2}'")
 
 def getNTPTime(host):
         port = 123
@@ -81,11 +74,12 @@ def getNTPTime(host):
         return time.ctime(t).replace("  "," ")
 
 def getClientTime():
-    command = "date +'%a %b %d %T %Y'"
-    proc = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True)
-    (dist, err) = proc.communicate()
-    dist = dist.decode('UTF-8')
-    return(dist)
+    return execute("date +'%a %b %d %T %Y'")
+
+def getSssd():
+    return execute("systemctl is-active sssd.service")
+def getSmdb():
+    return execute("systemctl is-active smdb.service")
 
 class Controls(object):
     def __init__(self):
@@ -157,18 +151,20 @@ class Controls(object):
         label6_a.set_halign(Gtk.Align.END)
         label6_a.set_direction(Gtk.TextDirection.LTR)
 
-        sssd = getsssd()
-        label7 = Gtk.Label(sssd)
-        if("not found" in sssd):
+        klist = getKlist()
+        label7 = Gtk.Label(klist)
+        if(("no credentials cache found" in klist) or (klist == "")):
             label7 = Gtk.Label(_("Fail"))
         else:
             label7 = Gtk.Label(_("Success"))
 
         label7.set_halign(Gtk.Align.START)
         label7.set_direction(Gtk.TextDirection.LTR)
-        label7_a = Gtk.Label(_("Sssd control: "))
+        label7_a = Gtk.Label(_("Klist control: "))
         label7_a.set_halign(Gtk.Align.END)
         label7_a.set_direction(Gtk.TextDirection.LTR)
+
+        separator2 = Gtk.Separator()
 
         label8 = Gtk.Label(getNTPTime(getLDAP()))
         label8.set_halign(Gtk.Align.START)
@@ -183,6 +179,34 @@ class Controls(object):
         label9_a = Gtk.Label(_("Client time: "))
         label9_a.set_halign(Gtk.Align.END)
         label9_a.set_direction(Gtk.TextDirection.LTR)
+
+        separator3 = Gtk.Separator()
+
+        sssd = getSssd()
+        label10 = Gtk.Label(sssd)
+        if sssd == "active":
+            label10 = Gtk.Label(_("Active"))
+        else:
+            label10 = Gtk.Label(_("Inactive"))
+
+        label10.set_halign(Gtk.Align.START)
+        label10.set_direction(Gtk.TextDirection.LTR)
+        label10_a = Gtk.Label(_("Sssd service control: "))
+        label10_a.set_halign(Gtk.Align.END)
+        label10_a.set_direction(Gtk.TextDirection.LTR)
+
+        smdb = getSmdb()
+        label11 = Gtk.Label(smdb)
+        if smdb == "active":
+            label11 = Gtk.Label(_("Active"))
+        else:
+            label11 = Gtk.Label(_("Inactive"))
+
+        label11.set_halign(Gtk.Align.START)
+        label11.set_direction(Gtk.TextDirection.LTR)
+        label11_a = Gtk.Label(_("Smdb service control: "))
+        label11_a.set_halign(Gtk.Align.END)
+        label11_a.set_direction(Gtk.TextDirection.LTR)
 
         grid.attach(label1, 0, 0, 4, 1)
         grid.attach_next_to(separator1, label1, Gtk.PositionType.BOTTOM, 4, 2)
@@ -202,12 +226,16 @@ class Controls(object):
         grid.attach_next_to(label7_a, label6_a, Gtk.PositionType.BOTTOM, 1, 2)
         grid.attach_next_to(label7, label7_a, Gtk.PositionType.RIGHT, 3, 2)
 
-        separator2 = Gtk.Separator()
-
         grid.attach_next_to(separator2, label7_a, Gtk.PositionType.BOTTOM, 4, 2)
         grid.attach_next_to(label8_a, separator2, Gtk.PositionType.BOTTOM, 1, 2)
         grid.attach_next_to(label8, label8_a, Gtk.PositionType.RIGHT, 3, 2)
-        grid.attach_next_to(label9_a, label8_a, Gtk.PositionType.BOTTOM, 1, 1)
-        grid.attach_next_to(label9, label9_a, Gtk.PositionType.RIGHT, 4, 4)
+        grid.attach_next_to(label9_a, label8_a, Gtk.PositionType.BOTTOM, 1, 2)
+        grid.attach_next_to(label9, label9_a, Gtk.PositionType.RIGHT, 3, 2)
+
+        grid.attach_next_to(separator3, label9_a, Gtk.PositionType.BOTTOM, 4, 2)
+        grid.attach_next_to(label10_a, separator3, Gtk.PositionType.BOTTOM, 1, 2)
+        grid.attach_next_to(label10, label10_a, Gtk.PositionType.RIGHT, 3, 2)
+        grid.attach_next_to(label11_a, label10_a, Gtk.PositionType.BOTTOM, 1, 2)
+        grid.attach_next_to(label11, label11_a, Gtk.PositionType.RIGHT, 3, 2)
 
         window.show_all()
