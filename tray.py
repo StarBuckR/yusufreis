@@ -6,7 +6,7 @@ from gi.repository import Gtk, GdkPixbuf
 
 import pyscreenshot as ImageGrab
 
-import gui, message, summary
+import gui, message, summary, controls
 import subprocess, gettext, sys
 
 el = gettext.translation('base', 'locale', fallback=True)
@@ -31,6 +31,10 @@ class TrayIcon(Gtk.StatusIcon):
         self.menu_item1.connect("activate", self.on_summary_click)
         self.menu.append(self.menu_item1)
 
+        self.menu_item1 = Gtk.MenuItem(_("Controls"))
+        self.menu_item1.connect("activate", self.on_controls_click)
+        self.menu.append(self.menu_item1)
+
         self.menu_item1 = Gtk.MenuItem(_("Send"))
         self.menu_item1.connect("activate", self.on_send_click)
         self.menu.append(self.menu_item1)
@@ -44,6 +48,9 @@ class TrayIcon(Gtk.StatusIcon):
 
     def on_summary_click(self, button):
         summary.Summary()
+    
+    def on_controls_click(self, button):
+        controls.Controls()
 
     def on_secondary_click(self, widget, button, time):
         self.menu.show_all()
@@ -57,16 +64,6 @@ class TrayIcon(Gtk.StatusIcon):
 
         self.gui_window = gui.Window()
         self.gui_window.show_popup_window()
-
-def control():
-    username = subprocess.getoutput("whoami")
-    base_dir = subprocess.getoutput("getent passwd " + username + " | awk -F: ' { print $6} '")
-    domain_name = subprocess.getoutput("dnsdomainname")
-    
-    if domain_name in base_dir:
-        return True
-    else:
-        return False
 
 if __name__ == '__main__':
     tray = TrayIcon()

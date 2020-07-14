@@ -6,8 +6,12 @@
 """
 
 # Libraries
-from gi.repository import Gio, Gtk, GdkPixbuf, AppIndicator3 as appindicator
 import gi
+
+gi.require_version("Gtk", "3.0")
+gi.require_version("AppIndicator3", "0.1")
+
+from gi.repository import Gio, Gtk, GdkPixbuf, AppIndicator3 as appindicator
 import os
 import sys
 import subprocess
@@ -20,8 +24,6 @@ el.install()
 _ = el.gettext
 
 
-gi.require_version("Gtk", "3.0")
-gi.require_version("AppIndicator3", "0.1")
 
 CURRDIR = os.path.dirname(os.path.abspath(__file__))
 MAINDIR = "./"
