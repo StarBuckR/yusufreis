@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: migtest 2.lab\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-14 17:20+0300\n"
-"PO-Revision-Date: 2020-07-14 17:20+0300\n"
+"POT-Creation-Date: 2020-07-14 20:17+0300\n"
+"PO-Revision-Date: 2020-07-14 20:17+0300\n"
 "Last-Translator: Administrator <administrator@pardus.migtest2.lab>\n"
 "Language-Team: Turkish\n"
 "Language: tr\n"
@@ -30,7 +30,7 @@ msgstr "Özet"
 msgid "Controls"
 msgstr "Kontroller"
 
-#: tray.py:38 gui.py:24 gui.py:32
+#: tray.py:38 gui.py:17 gui.py:40
 msgid "Send"
 msgstr "Gönder"
 
@@ -46,78 +46,102 @@ msgstr "Sol tıklandı"
 msgid "Send clicked"
 msgstr "Gönder tıklandı"
 
-#: gui.py:21
-msgid "Note"
-msgstr "Not"
+#: gui.py:34
+msgid "Start typing your note here"
+msgstr "Notunuzu buraya yazınız"
 
-#: summary.py:109
+#: gui.py:36
+msgid "Note:"
+msgstr "Not:"
+
+#: gui.py:44
+msgid "Cancel"
+msgstr "İptal"
+
+#: summary.py:84
 msgid "Settings"
 msgstr "Ayarlar"
 
-#: summary.py:121
+#: summary.py:96
 msgid "OS:"
 msgstr "İşletim Sistemi:"
 
-#: summary.py:128
+#: summary.py:103
 msgid "CPU:"
 msgstr "İşlemci:"
 
-#: summary.py:135
+#: summary.py:110
 msgid "RAM:"
 msgstr "RAM:"
 
-#: summary.py:144
+#: summary.py:119
 msgid "Domain could not found"
 msgstr "Domain bulunamadı"
 
-#: summary.py:148
+#: summary.py:123
 msgid "Domain:"
 msgstr "Domain:"
 
-#: summary.py:155
+#: summary.py:130
 msgid "Workgroup could not found"
 msgstr "Workgroup bulunamadı"
 
-#: summary.py:159
+#: summary.py:134
 msgid "Workgroup:"
 msgstr "Workgroup:"
 
-#: controls.py:117
+#: controls.py:111
 msgid "Username: "
 msgstr "Kullanıcı adı: "
 
-#: controls.py:124
+#: controls.py:118
 msgid "Getent control: "
 msgstr "Getent kontrol: "
 
-#: controls.py:131
+#: controls.py:125
 msgid "Domain control: "
 msgstr "Domain kontrol: "
 
-#: controls.py:138 controls.py:151 controls.py:165
+#: controls.py:132 controls.py:145 controls.py:159
 msgid "Success"
 msgstr "Başarılı"
 
-#: controls.py:140 controls.py:153 controls.py:163
+#: controls.py:134 controls.py:147 controls.py:157
 msgid "Fail"
-msgstr "Hata"
+msgstr "Başarısız"
 
-#: controls.py:144
+#: controls.py:138
 msgid "Ping control: "
 msgstr "Ping kontrol: "
 
-#: controls.py:156
+#: controls.py:150
 msgid "Host control: "
 msgstr "Host kontrol: "
 
-#: controls.py:169
-msgid "Sssd control: "
-msgstr "Sssd kontrol: "
+#: controls.py:163
+msgid "Klist control: "
+msgstr "Klist kontrol: "
 
-#: controls.py:176
+#: controls.py:172
 msgid "DC time: "
 msgstr "DC zamanı: "
 
-#: controls.py:183
+#: controls.py:179
 msgid "Client time: "
 msgstr "Kullanıcı zamanı: "
+
+#: controls.py:188 controls.py:201
+msgid "Active"
+msgstr "Aktif"
+
+#: controls.py:190 controls.py:203
+msgid "Inactive"
+msgstr "İnaktif"
+
+#: controls.py:194
+msgid "Sssd service control: "
+msgstr "Sssd servis kontrol: "
+
+#: controls.py:207
+msgid "Smdb service control: "
+msgstr "Smdb servis kontrol: "
