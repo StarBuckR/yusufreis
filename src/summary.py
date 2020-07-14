@@ -20,14 +20,14 @@ import gettext
 import locale
 import controls
 
-el = gettext.translation('base', 'locale', fallback=True)
+el = gettext.translation('base', '../locale', fallback=True)
 el.install()
 _ = el.gettext
 
 
 
 CURRDIR = os.path.dirname(os.path.abspath(__file__))
-MAINDIR = "./"
+MAINDIR = "../"
 ICONDomain = os.path.join(MAINDIR+"images/", 'Domain-icon.png')
 ICONLocal = os.path.join(MAINDIR+"images/", 'Local-icon.png')
 
