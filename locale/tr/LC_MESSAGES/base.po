@@ -143,5 +143,5 @@ msgid "Sssd service control: "
 msgstr "Sssd servis kontrol: "
 
 #: controls.py:207
-msgid "Smdb service control: "
-msgstr "Smdb servis kontrol: "
+msgid "Smbd service control: "
+msgstr "Smbd servis kontrol: "

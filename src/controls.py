@@ -84,8 +84,8 @@ def getClientTime():
 
 def getSssd():
     return execute("systemctl is-active sssd.service")
-def getSmdb():
-    return execute("systemctl is-active smdb.service")
+def getSmbd():
+    return execute("systemctl is-active smbd.service")
 
 class Controls(object):
     def __init__(self):
@@ -207,16 +207,16 @@ class Controls(object):
         label10_a.set_halign(Gtk.Align.END)
         label10_a.set_direction(Gtk.TextDirection.LTR)
 
-        smdb = getSmdb()
-        label11 = Gtk.Label(smdb)
-        if smdb == "active":
+        smbd = getSmbd()
+        label11 = Gtk.Label(smbd)
+        if smbd == "active":
             label11 = Gtk.Label(_("Active"))
         else:
             label11 = Gtk.Label(_("Inactive"))
 
         label11.set_halign(Gtk.Align.START)
         label11.set_direction(Gtk.TextDirection.LTR)
-        label11_a = Gtk.Label(_("Smdb service control: "))
+        label11_a = Gtk.Label(_("Smbd service control: "))
         label11_a.set_halign(Gtk.Align.END)
         label11_a.set_direction(Gtk.TextDirection.LTR)
 
