@@ -23,6 +23,7 @@ import socket
 import struct, time
 
 socket.setdefaulttimeout(5)
+BASHTIMEOUT = str(3)
 
 el = gettext.translation('base', 'locale', fallback=True)
 el.install()
@@ -31,7 +32,7 @@ _ = el.gettext
 
 def execute(command):
     try:
-        proc = subprocess.Popen("timeout 3 " + command, stdout=subprocess.PIPE, shell=True)
+        proc = subprocess.Popen("timeout " + BASHTIMEOUT + " " + command, stdout=subprocess.PIPE, shell=True)
         (dist, err) = proc.communicate()
         dist = dist.decode('UTF-8')
         return(dist.strip())
@@ -124,7 +125,13 @@ class Controls(object):
         label3_a.set_halign(Gtk.Align.END)
         label3_a.set_direction(Gtk.TextDirection.LTR)
 
-        label4 = Gtk.Label(getDomainName())
+        domainname = getDomainName()
+        label4 = Gtk.Label(domainname)
+        if domainname != "":
+            pass
+        else:
+            label4 = Gtk.Label(_("Fail"))
+
         label4.set_halign(Gtk.Align.START)
         label4.set_direction(Gtk.TextDirection.LTR)
         label4_a = Gtk.Label(_("Domain control: "))
