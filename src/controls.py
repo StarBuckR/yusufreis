@@ -22,6 +22,8 @@ from socket import AF_INET, SOCK_DGRAM
 import socket
 import struct, time
 
+socket.setdefaulttimeout(5)
+
 el = gettext.translation('base', 'locale', fallback=True)
 el.install()
 _ = el.gettext
@@ -29,7 +31,7 @@ _ = el.gettext
 
 def execute(command):
     try:
-        proc = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True)
+        proc = subprocess.Popen("timeout 3 " + command, stdout=subprocess.PIPE, shell=True)
         (dist, err) = proc.communicate()
         dist = dist.decode('UTF-8')
         return(dist.strip())
@@ -58,6 +60,7 @@ def getLDAP():
     return execute("net ads info 2>/dev/null | grep 'LDAP server name' | awk -F: '{print $2}'")
 
 def getNTPTime(host):
+    try:
         port = 123
         buf = 1024
         address = (host,port)
@@ -72,6 +75,8 @@ def getNTPTime(host):
         t -= TIME1970
 
         return time.ctime(t).replace("  "," ")
+    except socket.timeout:
+        return _("Fail")
 
 def getClientTime():
     return execute("date +'%a %b %d %T %Y'")
