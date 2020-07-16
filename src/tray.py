@@ -6,7 +6,7 @@ from gi.repository import Gtk, GdkPixbuf
 
 import pyscreenshot as ImageGrab
 
-import gui, message, summary, controls
+import send, message, summary, controls
 import subprocess, gettext, sys
 
 el = gettext.translation('base', 'locale', fallback=True)
@@ -62,8 +62,8 @@ class TrayIcon(Gtk.StatusIcon):
         image = ImageGrab.grab()
         image.save('image.jpg')
 
-        self.gui_window = gui.Window()
-        self.gui_window.show_popup_window()
+        self.send_window = send.Window()
+        self.send_window.show_popup_window()
 
 if __name__ == '__main__':
     tray = TrayIcon()

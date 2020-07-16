@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="apps.gsettings-projectx" path="/apps/gsettings-projectx/">
+    <key type="s" name="ipaddress">
+      <default>'localhost:3000/users'</default>
+      <summary>Ip Address</summary>
+      <description>Ip Address that screen shot will sent to.</description>
+    </key>
+  </schema>
+</schemalist>

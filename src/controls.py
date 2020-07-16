@@ -91,7 +91,7 @@ class Controls(object):
     def __init__(self):
         # ana pencere bileşeni
         window = Gtk.Window(type=Gtk.WindowType.TOPLEVEL)
-        window.set_title('PiriReis')
+        window.set_title(_("Controls"))
         window.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
         window.set_border_width(32)
         #window.set_icon_from_file(summary.ICONDomain)

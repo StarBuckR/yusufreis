@@ -12,7 +12,13 @@ el.install()
 _ = el.gettext
 
 class Window(object):
+    BASE_KEY = "apps.gsettings-projectx"
     def __init__(self):
+        # GSettings key
+        settings = Gio.Settings.new(self.BASE_KEY)
+        self.post_address = settings.get_string("ipaddress")
+        print(self.post_address)
+
         self.window = Gtk.Window(type=Gtk.WindowType.TOPLEVEL)
         self.window.set_title(_("Send"))
         self.window.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
@@ -30,6 +36,7 @@ class Window(object):
 
         self.textview = Gtk.TextView()
         self.textview.set_size_request(400, 200)
+        self.textview.set_wrap_mode(Gtk.WrapMode.WORD)
         textbuffer = self.textview.get_buffer()
         textbuffer.set_text(_("Start typing your note here"))
 
@@ -86,7 +93,7 @@ class Window(object):
             "username": username
         }
 
-        response = requests.post('http://localhost:3000/users', files=files, data=data)
+        response = requests.post(self.post_address, files=files, data=data)
         #response = requests.get('http://localhost:3000/users')
         print(response.text)
 
