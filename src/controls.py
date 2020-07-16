@@ -94,6 +94,9 @@ def getSssd():
 def getSmbd():
     return execute("systemctl is-active smbd.service")
 
+def getPam():
+    return execute("cat /etc/pam.d/common-session | grep  'session required pam_mkhomedir.so skel=/etc/skel umask=0077'")
+
 class Controls(object):
     def __init__(self):
         # ana pencere bileşeni
@@ -189,49 +192,62 @@ class Controls(object):
         label7_a.set_halign(Gtk.Align.END)
         label7_a.set_direction(Gtk.TextDirection.LTR)
 
-        separator2 = Gtk.Separator()
+        pam = getPam()
+        label8 = Gtk.Label(pam)
+        if(klist == ""):
+            label8 = Gtk.Label(_("Fail"))
+        else:
+            label8 = Gtk.Label(_("Success"))
 
-        label8 = Gtk.Label(getNTPTime(getLDAP()))
         label8.set_halign(Gtk.Align.START)
         label8.set_direction(Gtk.TextDirection.LTR)
-        label8_a = Gtk.Label(_("DC time: "))
+        label8_a = Gtk.Label(_("Pam control: "))
         label8_a.set_halign(Gtk.Align.END)
         label8_a.set_direction(Gtk.TextDirection.LTR)
 
-        label9 = Gtk.Label(getClientTime())
+        separator2 = Gtk.Separator()
+
+        label9 = Gtk.Label(getNTPTime(getLDAP()))
         label9.set_halign(Gtk.Align.START)
         label9.set_direction(Gtk.TextDirection.LTR)
-        label9_a = Gtk.Label(_("Client time: "))
+        label9_a = Gtk.Label(_("DC time: "))
         label9_a.set_halign(Gtk.Align.END)
         label9_a.set_direction(Gtk.TextDirection.LTR)
+
+        label10 = Gtk.Label(getClientTime())
+        label10.set_halign(Gtk.Align.START)
+        label10.set_direction(Gtk.TextDirection.LTR)
+        label10_a = Gtk.Label(_("Client time: "))
+        label10_a.set_halign(Gtk.Align.END)
+        label10_a.set_direction(Gtk.TextDirection.LTR)
 
         separator3 = Gtk.Separator()
 
         sssd = getSssd()
-        label10 = Gtk.Label(sssd)
+        label11 = Gtk.Label(sssd)
         if sssd == "active":
-            label10 = Gtk.Label(_("Active"))
-        else:
-            label10 = Gtk.Label(_("Inactive"))
-
-        label10.set_halign(Gtk.Align.START)
-        label10.set_direction(Gtk.TextDirection.LTR)
-        label10_a = Gtk.Label(_("Sssd service control: "))
-        label10_a.set_halign(Gtk.Align.END)
-        label10_a.set_direction(Gtk.TextDirection.LTR)
-
-        smbd = getSmbd()
-        label11 = Gtk.Label(smbd)
-        if smbd == "active":
             label11 = Gtk.Label(_("Active"))
         else:
             label11 = Gtk.Label(_("Inactive"))
 
         label11.set_halign(Gtk.Align.START)
         label11.set_direction(Gtk.TextDirection.LTR)
-        label11_a = Gtk.Label(_("Smbd service control: "))
+        label11_a = Gtk.Label(_("Sssd service control: "))
         label11_a.set_halign(Gtk.Align.END)
         label11_a.set_direction(Gtk.TextDirection.LTR)
+
+        smbd = getSmbd()
+        label12 = Gtk.Label(smbd)
+        if smbd == "active":
+            label12 = Gtk.Label(_("Active"))
+        else:
+            label12 = Gtk.Label(_("Inactive"))
+
+        label12.set_halign(Gtk.Align.START)
+        label12.set_direction(Gtk.TextDirection.LTR)
+        label12_a = Gtk.Label(_("Smbd service control: "))
+        label12_a.set_halign(Gtk.Align.END)
+        label12_a.set_direction(Gtk.TextDirection.LTR)
 
         grid.attach(label1, 0, 0, 4, 1)
         grid.attach_next_to(separator1, label1, Gtk.PositionType.BOTTOM, 4, 2)
@@ -250,17 +266,19 @@ class Controls(object):
         grid.attach_next_to(label6, label6_a, Gtk.PositionType.RIGHT, 3, 2)
         grid.attach_next_to(label7_a, label6_a, Gtk.PositionType.BOTTOM, 1, 2)
         grid.attach_next_to(label7, label7_a, Gtk.PositionType.RIGHT, 3, 2)
-
-        grid.attach_next_to(separator2, label7_a, Gtk.PositionType.BOTTOM, 4, 2)
-        grid.attach_next_to(label8_a, separator2, Gtk.PositionType.BOTTOM, 1, 2)
+        grid.attach_next_to(label8_a, label7_a, Gtk.PositionType.BOTTOM, 1, 2)
         grid.attach_next_to(label8, label8_a, Gtk.PositionType.RIGHT, 3, 2)
-        grid.attach_next_to(label9_a, label8_a, Gtk.PositionType.BOTTOM, 1, 2)
-        grid.attach_next_to(label9, label9_a, Gtk.PositionType.RIGHT, 3, 2)
 
-        grid.attach_next_to(separator3, label9_a, Gtk.PositionType.BOTTOM, 4, 2)
-        grid.attach_next_to(label10_a, separator3, Gtk.PositionType.BOTTOM, 1, 2)
+        grid.attach_next_to(separator2, label8_a, Gtk.PositionType.BOTTOM, 4, 2)
+        grid.attach_next_to(label9_a, separator2, Gtk.PositionType.BOTTOM, 1, 2)
+        grid.attach_next_to(label9, label9_a, Gtk.PositionType.RIGHT, 3, 2)
+        grid.attach_next_to(label10_a, label9_a, Gtk.PositionType.BOTTOM, 1, 2)
         grid.attach_next_to(label10, label10_a, Gtk.PositionType.RIGHT, 3, 2)
-        grid.attach_next_to(label11_a, label10_a, Gtk.PositionType.BOTTOM, 1, 2)
+
+        grid.attach_next_to(separator3, label10_a, Gtk.PositionType.BOTTOM, 4, 2)
+        grid.attach_next_to(label11_a, separator3, Gtk.PositionType.BOTTOM, 1, 2)
         grid.attach_next_to(label11, label11_a, Gtk.PositionType.RIGHT, 3, 2)
+        grid.attach_next_to(label12_a, label11_a, Gtk.PositionType.BOTTOM, 1, 2)
+        grid.attach_next_to(label12, label12_a, Gtk.PositionType.RIGHT, 3, 2)
 
         window.show_all()

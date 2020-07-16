@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: migtest 2.lab\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-16 10:54+0300\n"
-"PO-Revision-Date: 2020-07-16 10:54+0300\n"
+"POT-Creation-Date: 2020-07-16 12:03+0300\n"
+"PO-Revision-Date: 2020-07-16 12:05+0300\n"
 "Last-Translator: Administrator <administrator@pardus.migtest2.lab>\n"
 "Language-Team: Turkish\n"
 "Language: tr\n"
@@ -26,7 +26,7 @@ msgstr "Tray İkon"
 msgid "Summary"
 msgstr "Özet"
 
-#: src/tray.py:34 src/controls.py:101
+#: src/tray.py:34 src/controls.py:104
 msgid "Controls"
 msgstr "Kontroller"
 
@@ -36,11 +36,11 @@ msgstr "Gönder"
 
 #: src/tray.py:42
 msgid "Quit"
-msgstr "Çıkış"
+msgstr "Çıkış Yap"
 
 #: src/tray.py:47
 msgid "Left clicked"
-msgstr "Sol Tıklandı"
+msgstr "Sol tıklandı"
 
 #: src/tray.py:68 src/send.py:105
 msgid "Error"
@@ -49,25 +49,7 @@ msgstr "Hata"
 #: src/tray.py:69
 msgid ""
 "There has been an error while taking a screenshot. Please try again later"
-msgstr "Ekran görüntüsü alırken bir hata gerçekleşti. Lütfen daha sonra tekrar deneyin"
-
-#: src/send.py:42
-msgid "Start typing your note here"
-msgstr "Notunuzu buraya yazınız"
-
-#: src/send.py:44
-msgid "Note:"
-msgstr "Not:"
-
-#: src/send.py:52
-msgid "Cancel"
-msgstr "İptal"
-
-#: src/send.py:106
-msgid ""
-"There has been an error while sending information to the server. Please try "
-"again later"
-msgstr "Sunucuya bilgileri gönderirken hata gerçekleşti. Lütfen daha sonra tekrar deneyin"
+msgstr "Ekran görüntüsü alırken bir hata meydana geldi. Lütfen daha sonra tekrar deneyin"
 
 #: src/summary.py:79
 msgid "Settings"
@@ -101,59 +83,82 @@ msgstr "Workgroup bulunamadı"
 msgid "Workgroup:"
 msgstr "Workgroup:"
 
-#: src/controls.py:87 src/controls.py:140 src/controls.py:153
-#: src/controls.py:166 src/controls.py:182
+#: src/send.py:42
+msgid "Start typing your note here"
+msgstr "Notunuzu buraya yazınız"
+
+#: src/send.py:44
+msgid "Note:"
+msgstr "Not:"
+
+#: src/send.py:52
+msgid "Cancel"
+msgstr "İptal"
+
+#: src/send.py:106
+msgid ""
+"There has been an error while sending information to the server. Please try "
+"again later"
+msgstr "Bilgileri sunucuya gönderirken hata gerçekleşti. Lütfen daha sonra tekrar deneyin"
+
+#: src/controls.py:87 src/controls.py:143 src/controls.py:156
+#: src/controls.py:169 src/controls.py:185 src/controls.py:198
 msgid "Fail"
 msgstr "Başarısız"
 
-#: src/controls.py:124
+#: src/controls.py:127
 msgid "Username: "
-msgstr "Kullanıcı adı: "
+msgstr "Kullanıcı Adı: "
 
-#: src/controls.py:131
+#: src/controls.py:134
 msgid "Getent control: "
 msgstr "Getent kontrolü: "
 
-#: src/controls.py:144
+#: src/controls.py:147
 msgid "Domain control: "
 msgstr "Domain kontrolü: "
 
-#: src/controls.py:151 src/controls.py:164 src/controls.py:184
+#: src/controls.py:154 src/controls.py:167 src/controls.py:187
+#: src/controls.py:200
 msgid "Success"
 msgstr "Başarılı"
 
-#: src/controls.py:157
+#: src/controls.py:160
 msgid "Ping control: "
 msgstr "Ping kontrolü: "
 
-#: src/controls.py:169
+#: src/controls.py:172
 msgid "Host control: "
 msgstr "Host kontrolü: "
 
-#: src/controls.py:188
+#: src/controls.py:191
 msgid "Klist control: "
 msgstr "Klist kontrolü: "
 
-#: src/controls.py:197
+#: src/controls.py:204
+msgid "Pam control: "
+msgstr "Pam kontrolü: "
+
+#: src/controls.py:213
 msgid "DC time: "
 msgstr "DC zamanı: "
 
-#: src/controls.py:204
+#: src/controls.py:220
 msgid "Client time: "
 msgstr "Kullanıcı zamanı: "
 
-#: src/controls.py:213 src/controls.py:226
+#: src/controls.py:229 src/controls.py:242
 msgid "Active"
 msgstr "Aktif"
 
-#: src/controls.py:215 src/controls.py:228
+#: src/controls.py:231 src/controls.py:244
 msgid "Inactive"
 msgstr "İnaktif"
 
-#: src/controls.py:219
+#: src/controls.py:235
 msgid "Sssd service control: "
 msgstr "Sssd servis kontrolü: "
 
-#: src/controls.py:232
+#: src/controls.py:248
 msgid "Smbd service control: "
-msgstr "Smbd servis kontrolü: "
+msgstr "Smdb servis kontrolü: "
