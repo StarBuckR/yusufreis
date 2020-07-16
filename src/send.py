@@ -6,6 +6,7 @@ import requests
 import subprocess
 
 import gettext
+import message, controls
 
 el = gettext.translation('base', 'locale', fallback=True)
 el.install()
@@ -74,30 +75,37 @@ class Window(object):
         self.window.show_all()
 
     def on_send_click(self, button):
-        buffer = self.textview.get_buffer()
-        text = buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter(), False)
-        print(text)
+        try:
+            buffer = self.textview.get_buffer()
+            text = buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter(), False)
+            print(text)
 
-        hostname = subprocess.getoutput("hostname")
-        username = subprocess.getoutput("whoami")
-        ip_adress = subprocess.getoutput("ip route get 1.2.3.4 | awk '{printf $7}'")
+            hostname = controls.execute("hostname")
+            username = controls.execute("whoami")
+            ip_address = controls.execute("ip route get 1.2.3.4 | awk '{printf $7}'")
+            
+            files = {
+                "image": open('image.jpg', 'rb')
+            }
 
-        files = {
-            "image": open('image.jpg', 'rb')
-        }
+            data = {
+                "note": text,
+                "machine_name": hostname,
+                "ip_address": ip_address,
+                "username": username
+            }
 
-        data = {
-            "note": text,
-            "machine_name": hostname,
-            "ip_adress": ip_adress,
-            "username": username
-        }
+            response = requests.post(self.post_address, files=files, data=data)
+            #response = requests.get('http://localhost:3000/users')
+            message.log_info(response.text)
 
-        response = requests.post(self.post_address, files=files, data=data)
-        #response = requests.get('http://localhost:3000/users')
-        print(response.text)
-
-        self.window.close()
+            self.window.close()
+        except Exception as e:
+            message.log_error("Exception occurred: " + str(e))
+            message.MessageDialogWindow().error_dialog(_("Error"), 
+                _("There has been an error while sending information to the server. Please try again later"))
+            
+            self.window.close()
 
     def on_cancel_click(self, button):
         self.window.close()

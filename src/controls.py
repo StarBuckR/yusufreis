@@ -22,6 +22,8 @@ from socket import AF_INET, SOCK_DGRAM
 import socket
 import struct, time
 
+import message
+
 socket.setdefaulttimeout(5)
 BASHTIMEOUT = str(3)
 
@@ -35,8 +37,12 @@ def execute(command):
         proc = subprocess.Popen("timeout " + BASHTIMEOUT + " " + command, stdout=subprocess.PIPE, shell=True)
         (dist, err) = proc.communicate()
         dist = dist.decode('UTF-8')
+        if(dist == ""):
+            message.log_info(command + " " + "returning null")
+
         return(dist.strip())
-    except:
+    except Exception as e:
+        message.log_error("Exception occurred")
         return("")
 
 def getUsername():
@@ -77,6 +83,7 @@ def getNTPTime(host):
 
         return time.ctime(t).replace("  "," ")
     except socket.timeout:
+        message.log_error(("Could not fetch time from NTP server"))
         return _("Fail")
 
 def getClientTime():
@@ -162,6 +169,12 @@ class Controls(object):
         label6_a = Gtk.Label(_("Host control: "))
         label6_a.set_halign(Gtk.Align.END)
         label6_a.set_direction(Gtk.TextDirection.LTR)
+
+        # control if klist command exists
+        if os.path.isfile("/etc/krb5.conf") is False:
+            message.log_info("klist is not found")
+        else:
+            message.log_info("klist found")
 
         klist = getKlist()
         label7 = Gtk.Label(klist)

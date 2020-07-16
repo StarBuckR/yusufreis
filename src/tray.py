@@ -27,19 +27,19 @@ class TrayIcon(Gtk.StatusIcon):
 
         self.menu = Gtk.Menu()
 
-        self.menu_item1 = Gtk.MenuItem(_("Summary"))
+        self.menu_item1 = Gtk.MenuItem(label=_("Summary"))
         self.menu_item1.connect("activate", self.on_summary_click)
         self.menu.append(self.menu_item1)
 
-        self.menu_item1 = Gtk.MenuItem(_("Controls"))
+        self.menu_item1 = Gtk.MenuItem(label=_("Controls"))
         self.menu_item1.connect("activate", self.on_controls_click)
         self.menu.append(self.menu_item1)
 
-        self.menu_item1 = Gtk.MenuItem(_("Send"))
+        self.menu_item1 = Gtk.MenuItem(label=_("Send"))
         self.menu_item1.connect("activate", self.on_send_click)
         self.menu.append(self.menu_item1)
 
-        self.menu_item2 = Gtk.MenuItem(_("Quit"))
+        self.menu_item2 = Gtk.MenuItem(label=_("Quit"))
         self.menu.append(self.menu_item2)
         self.menu_item2.connect("activate", Gtk.main_quit)
 
@@ -57,13 +57,17 @@ class TrayIcon(Gtk.StatusIcon):
         self.menu.popup(None, None, None, self, 3, time)
 
     def on_send_click(self, button):
-        print(_("Send clicked"))
+        try:
+            image = ImageGrab.grab()
+            image.save('image.jpg')
 
-        image = ImageGrab.grab()
-        image.save('image.jpg')
-
-        self.send_window = send.Window()
-        self.send_window.show_popup_window()
+            self.send_window = send.Window()
+            self.send_window.show_popup_window()
+        except Exception as e:
+            message.log_error("Exception occured: " + str(e))
+            message.MessageDialogWindow().error_dialog(_("Error"), 
+                _("There has been an error while taking a screenshot. Please try again later"))
+            
 
 if __name__ == '__main__':
     tray = TrayIcon()

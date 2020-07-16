@@ -3,6 +3,25 @@ import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 
+import logging
+logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO, filename="projectx.log")
+console = logging.StreamHandler()
+
+def log_error(error):
+    console.setLevel(logging.ERROR)
+    logging.error(error)
+
+def log_warning(warning):
+    console.setLevel(logging.WARNING)
+    logging.warning(warning)
+
+def log_info(info):
+    console.setLevel(logging.INFO)
+    logging.info(info)
+
+def log_debug(debug):
+    console.setLevel(logging.DEBUG)
+    logging.debug(debug)
 
 class MessageDialogWindow(Gtk.Window):
     def __init__(self):

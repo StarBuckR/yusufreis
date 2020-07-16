@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: migtest 2.lab\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-14 20:17+0300\n"
-"PO-Revision-Date: 2020-07-14 20:17+0300\n"
+"POT-Creation-Date: 2020-07-16 10:54+0300\n"
+"PO-Revision-Date: 2020-07-16 10:54+0300\n"
 "Last-Translator: Administrator <administrator@pardus.migtest2.lab>\n"
 "Language-Team: Turkish\n"
 "Language: tr\n"
@@ -18,130 +18,142 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: tray.py:21
+#: src/tray.py:21
 msgid "Tray Icon"
 msgstr "Tray İkon"
 
-#: tray.py:30
+#: src/tray.py:30 src/summary.py:64
 msgid "Summary"
 msgstr "Özet"
 
-#: tray.py:34
+#: src/tray.py:34 src/controls.py:101
 msgid "Controls"
 msgstr "Kontroller"
 
-#: tray.py:38 gui.py:17 gui.py:40
+#: src/tray.py:38 src/send.py:24 src/send.py:48
 msgid "Send"
 msgstr "Gönder"
 
-#: tray.py:42
+#: src/tray.py:42
 msgid "Quit"
-msgstr "Çıkış Yap"
+msgstr "Çıkış"
 
-#: tray.py:47
+#: src/tray.py:47
 msgid "Left clicked"
-msgstr "Sol tıklandı"
+msgstr "Sol Tıklandı"
 
-#: tray.py:60
-msgid "Send clicked"
-msgstr "Gönder tıklandı"
+#: src/tray.py:68 src/send.py:105
+msgid "Error"
+msgstr "Hata"
 
-#: gui.py:34
+#: src/tray.py:69
+msgid ""
+"There has been an error while taking a screenshot. Please try again later"
+msgstr "Ekran görüntüsü alırken bir hata gerçekleşti. Lütfen daha sonra tekrar deneyin"
+
+#: src/send.py:42
 msgid "Start typing your note here"
 msgstr "Notunuzu buraya yazınız"
 
-#: gui.py:36
+#: src/send.py:44
 msgid "Note:"
 msgstr "Not:"
 
-#: gui.py:44
+#: src/send.py:52
 msgid "Cancel"
 msgstr "İptal"
 
-#: summary.py:84
+#: src/send.py:106
+msgid ""
+"There has been an error while sending information to the server. Please try "
+"again later"
+msgstr "Sunucuya bilgileri gönderirken hata gerçekleşti. Lütfen daha sonra tekrar deneyin"
+
+#: src/summary.py:79
 msgid "Settings"
 msgstr "Ayarlar"
 
-#: summary.py:96
+#: src/summary.py:91
 msgid "OS:"
 msgstr "İşletim Sistemi:"
 
-#: summary.py:103
+#: src/summary.py:98
 msgid "CPU:"
 msgstr "İşlemci:"
 
-#: summary.py:110
+#: src/summary.py:105
 msgid "RAM:"
 msgstr "RAM:"
 
-#: summary.py:119
+#: src/summary.py:114
 msgid "Domain could not found"
 msgstr "Domain bulunamadı"
 
-#: summary.py:123
+#: src/summary.py:118
 msgid "Domain:"
 msgstr "Domain:"
 
-#: summary.py:130
+#: src/summary.py:125
 msgid "Workgroup could not found"
 msgstr "Workgroup bulunamadı"
 
-#: summary.py:134
+#: src/summary.py:129
 msgid "Workgroup:"
 msgstr "Workgroup:"
 
-#: controls.py:111
-msgid "Username: "
-msgstr "Kullanıcı adı: "
-
-#: controls.py:118
-msgid "Getent control: "
-msgstr "Getent kontrol: "
-
-#: controls.py:125
-msgid "Domain control: "
-msgstr "Domain kontrol: "
-
-#: controls.py:132 controls.py:145 controls.py:159
-msgid "Success"
-msgstr "Başarılı"
-
-#: controls.py:134 controls.py:147 controls.py:157
+#: src/controls.py:87 src/controls.py:140 src/controls.py:153
+#: src/controls.py:166 src/controls.py:182
 msgid "Fail"
 msgstr "Başarısız"
 
-#: controls.py:138
+#: src/controls.py:124
+msgid "Username: "
+msgstr "Kullanıcı adı: "
+
+#: src/controls.py:131
+msgid "Getent control: "
+msgstr "Getent kontrolü: "
+
+#: src/controls.py:144
+msgid "Domain control: "
+msgstr "Domain kontrolü: "
+
+#: src/controls.py:151 src/controls.py:164 src/controls.py:184
+msgid "Success"
+msgstr "Başarılı"
+
+#: src/controls.py:157
 msgid "Ping control: "
-msgstr "Ping kontrol: "
+msgstr "Ping kontrolü: "
 
-#: controls.py:150
+#: src/controls.py:169
 msgid "Host control: "
-msgstr "Host kontrol: "
+msgstr "Host kontrolü: "
 
-#: controls.py:163
+#: src/controls.py:188
 msgid "Klist control: "
-msgstr "Klist kontrol: "
+msgstr "Klist kontrolü: "
 
-#: controls.py:172
+#: src/controls.py:197
 msgid "DC time: "
 msgstr "DC zamanı: "
 
-#: controls.py:179
+#: src/controls.py:204
 msgid "Client time: "
 msgstr "Kullanıcı zamanı: "
 
-#: controls.py:188 controls.py:201
+#: src/controls.py:213 src/controls.py:226
 msgid "Active"
 msgstr "Aktif"
 
-#: controls.py:190 controls.py:203
+#: src/controls.py:215 src/controls.py:228
 msgid "Inactive"
 msgstr "İnaktif"
 
-#: controls.py:194
+#: src/controls.py:219
 msgid "Sssd service control: "
-msgstr "Sssd servis kontrol: "
+msgstr "Sssd servis kontrolü: "
 
-#: controls.py:207
+#: src/controls.py:232
 msgid "Smbd service control: "
-msgstr "Smbd servis kontrol: "
+msgstr "Smbd servis kontrolü: "

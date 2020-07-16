@@ -68,9 +68,6 @@ class Summary(object):
         window.set_default_size(400, 400)
         window.set_resizable(False)
 
-        #window.connect_after('destroy', self.on_cikis_pencere)
-        # window.add(check_button)
-
         grid = Gtk.Grid()
         grid.set_row_spacing(5)
         grid.set_column_spacing(5)
