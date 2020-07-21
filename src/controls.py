@@ -192,6 +192,12 @@ class Controls(object):
         label7_a.set_halign(Gtk.Align.END)
         label7_a.set_direction(Gtk.TextDirection.LTR)
 
+        # control if pam exists
+        if os.path.isfile("/etc/pam.d/common-session") is False:
+            message.log_info("pam not found")
+        else:
+            message.log_info("pam found")
+
         pam = getPam()
         label8 = Gtk.Label(pam)
         if(klist == ""):

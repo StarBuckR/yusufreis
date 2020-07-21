@@ -25,7 +25,7 @@ el.install()
 _ = el.gettext
 
 CURRDIR = os.path.dirname(os.path.abspath(__file__))
-MAINDIR = "./"
+MAINDIR = "/usr/share/hvl/projectx/"
 ICONDomain = os.path.join(MAINDIR+"images/", 'Domain-icon.png')
 ICONLocal = os.path.join(MAINDIR+"images/", 'Local-icon.png')
 

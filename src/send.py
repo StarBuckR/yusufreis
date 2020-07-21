@@ -5,8 +5,11 @@ from gi.repository import Gtk, Gio, GdkPixbuf, Gdk
 import requests
 import subprocess
 
+import base64
+from io import BytesIO
+
 import gettext
-import message, controls
+import message, controls, summary
 
 el = gettext.translation('base', 'locale', fallback=True)
 el.install()
@@ -85,17 +88,21 @@ class Window(object):
             ip_address = controls.execute("ip route get 1.2.3.4 | awk '{printf $7}'")
             
             files = {
-                "image": open('image.jpg', 'rb')
+                "image": open(summary.MAINDIR + 'image.jpg', 'rb')
             }
+            base64_string = ""
+            with open(summary.MAINDIR + "image.jpg", "rb") as image_file:
+                base64_string = base64.b64encode(image_file.read())
 
             data = {
+                "base64": base64_string,
                 "note": text,
                 "machine_name": hostname,
                 "ip_address": ip_address,
                 "username": username
             }
 
-            response = requests.post(self.post_address, files=files, data=data)
+            response = requests.post(str(self.post_address), files=files, data=data)
             #response = requests.get('http://localhost:3000/users')
             message.log_info(response.text)
 

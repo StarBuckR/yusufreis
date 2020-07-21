@@ -59,7 +59,7 @@ class TrayIcon(Gtk.StatusIcon):
     def on_send_click(self, button):
         try:
             image = ImageGrab.grab()
-            image.save('image.jpg')
+            image.save(summary.MAINDIR + 'image.jpg')
 
             self.send_window = send.Window()
             self.send_window.show_popup_window()
