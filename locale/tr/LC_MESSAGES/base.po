@@ -162,3 +162,6 @@ msgstr "Sssd servis kontrolü: "
 #: src/controls.py:248
 msgid "Smbd service control: "
 msgstr "Smdb servis kontrolü: "
+
+msgid "Notifications"
+msgstr "Bildirimler"

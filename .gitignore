@@ -4,3 +4,4 @@ server
 image.jpg
 *.pot
 *.log
+logs

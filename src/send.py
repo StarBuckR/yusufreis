@@ -65,16 +65,6 @@ class Window(object):
         self.window.connect("destroy", self.on_destroy)
 
     def show_popup_window(self):
-        # pixbuf = GdkPixbuf.Pixbuf.new_from_file('image.jpg')
-
-        # height = pixbuf.get_height() / 1.7
-        # width = pixbuf.get_width() / 1.7
-        # pixbuf = pixbuf.scale_simple(width, height, GdkPixbuf.InterpType.BILINEAR)
-
-        # image = Gtk.Image()
-        # image.set_from_pixbuf(pixbuf)
-
-        # self.image_window.set_from_pixbuf(pixbuf)
         self.window.show_all()
 
     def on_send_click(self, button):
@@ -101,9 +91,8 @@ class Window(object):
                 "ip_address": ip_address,
                 "username": username
             }
-
+            # create new script that handles all api calls
             response = requests.post(str(self.post_address), files=files, data=data)
-            #response = requests.get('http://localhost:3000/users')
             message.log_info(response.text)
 
             self.window.close()

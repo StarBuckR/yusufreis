@@ -6,5 +6,10 @@
       <summary>Ip Address</summary>
       <description>Ip Address that screen shot will sent to.</description>
     </key>
+    <key type="s" name="notifications">
+      <default>'http://localhost:3000/notifications/get'</default>
+      <summary>Notifications</summary>
+      <description>Get notifications</description>
+    </key>
   </schema>
 </schemalist>
