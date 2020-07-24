@@ -57,10 +57,21 @@ def getRAM():
 def getDist():
     return controls.execute("lsb_release -ir | cut -d':' -f2| sed -e 's/^[[:space:]]*//'| tr '\n' ' '")
 
+def create_label_and_attach(grid, label_text, label_a_text, attach_next_to):
+        label = Gtk.Label(label_text)
+        label.set_halign(Gtk.Align.START)
+        label.set_direction(Gtk.TextDirection.LTR)
+        label_a = Gtk.Label(label_a_text)
+        label_a.set_halign(Gtk.Align.END)
+        label_a.set_direction(Gtk.TextDirection.LTR)
+
+        grid.attach_next_to(label_a, attach_next_to, Gtk.PositionType.BOTTOM, 1, 2)
+        grid.attach_next_to(label, label_a, Gtk.PositionType.RIGHT, 3, 2)
+
+        return label_a
+
 class Summary(object):
     def __init__(self):
-
-        # ana pencere bileşeni
         window = Gtk.Window(type=Gtk.WindowType.TOPLEVEL)
         window.set_title(_("Summary"))
         window.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
@@ -77,61 +88,10 @@ class Summary(object):
 
         window.add(grid)
 
-        quitBtn = Gtk.Button(label=_("Settings"))
-        quitBtn.set_size_request(80, 30)
-        quitBtn.connect("clicked", self.on_button_clicked)
-
         label1 = Gtk.Label(("<b>"+getHostname()+"</b>"), use_markup=True)
         label1.set_halign(Gtk.Align.CENTER)
+        grid.attach(label1, 0, 0, 4, 1)
 
-        separator1 = Gtk.Separator()
-
-        label2 = Gtk.Label(getDist())
-        label2.set_halign(Gtk.Align.START)
-        label2.set_direction(Gtk.TextDirection.LTR)
-        label2_a = Gtk.Label(_("OS:"))
-        label2_a.set_halign(Gtk.Align.END)
-        label2_a.set_direction(Gtk.TextDirection.LTR)
-
-        label3 = Gtk.Label(getCPU())
-        label3.set_halign(Gtk.Align.START)
-        label3.set_direction(Gtk.TextDirection.LTR)
-        label3_a = Gtk.Label(_("CPU:"))
-        label3_a.set_halign(Gtk.Align.END)
-        label3_a.set_direction(Gtk.TextDirection.LTR)
-
-        label4 = Gtk.Label(getRAM())
-        label4.set_halign(Gtk.Align.START)
-        label4.set_direction(Gtk.TextDirection.LTR)
-        label4_a = Gtk.Label(_("RAM:"))
-        label4_a.set_halign(Gtk.Align.END)
-        label4_a.set_direction(Gtk.TextDirection.LTR)
-
-        separator2 = Gtk.Separator()
-
-        domain = getDomain()
-        label5 = Gtk.Label(domain)
-        if(domain == ""):
-            label5 = Gtk.Label(_("Domain could not found"))
-
-        label5.set_halign(Gtk.Align.START)
-        label5.set_direction(Gtk.TextDirection.LTR)
-        label5_a = Gtk.Label(_("Domain:"))
-        label5_a.set_halign(Gtk.Align.END)
-        label5_a.set_direction(Gtk.TextDirection.LTR)
-
-        workgroup = getWorkgroup()
-        label6 = Gtk.Label(workgroup)
-        if(workgroup == ""):
-            label6 = Gtk.Label(_("Workgroup could not found"))
-
-        label6.set_halign(Gtk.Align.START)
-        label6.set_direction(Gtk.TextDirection.LTR)
-        label6_a = Gtk.Label(_("Workgroup:"))
-        label6_a.set_halign(Gtk.Align.END)
-        label6_a.set_direction(Gtk.TextDirection.LTR)
-
-        separator3 = Gtk.Separator()
 
         if (getDomain() != ""):
             pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(
@@ -147,29 +107,37 @@ class Summary(object):
                 preserve_aspect_ratio=True)
 
         image1 = Gtk.Image.new_from_pixbuf(pixbuf)
-
-        grid.attach(label1, 0, 0, 4, 1)
         grid.attach_next_to(image1, label1, Gtk.PositionType.BOTTOM, 4, 2)
+
+        separator1 = Gtk.Separator()
         grid.attach_next_to(separator1, image1, Gtk.PositionType.BOTTOM, 4, 2)
 
-        grid.attach_next_to(label2_a, separator1,
-                            Gtk.PositionType.BOTTOM, 1, 2)
-        grid.attach_next_to(label2, label2_a, Gtk.PositionType.RIGHT, 3, 2)
-        grid.attach_next_to(label3_a, label2_a, Gtk.PositionType.BOTTOM, 1, 2)
-        grid.attach_next_to(label3, label3_a, Gtk.PositionType.RIGHT, 3, 2)
-        grid.attach_next_to(label4_a, label3_a, Gtk.PositionType.BOTTOM, 1, 2)
-        grid.attach_next_to(label4, label4_a, Gtk.PositionType.RIGHT, 3, 2)
-        grid.attach_next_to(separator2, label4_a,
-                            Gtk.PositionType.BOTTOM, 4, 2)
-        grid.attach_next_to(label5_a, separator2,
-                            Gtk.PositionType.BOTTOM, 1, 2)
-        grid.attach_next_to(label5, label5_a, Gtk.PositionType.RIGHT, 3, 2)
-        grid.attach_next_to(label6_a, label5_a, Gtk.PositionType.BOTTOM, 1, 2)
-        grid.attach_next_to(label6, label6_a, Gtk.PositionType.RIGHT, 3, 2)
-        grid.attach_next_to(separator3, label6_a,
-                            Gtk.PositionType.BOTTOM, 4, 2)
+        label_a = create_label_and_attach(grid, getDist(), _("OS:"), separator1)
+        label_a = create_label_and_attach(grid, getCPU(), _("CPU:"), label_a)
+        label_a = create_label_and_attach(grid, getRAM(), _("RAM:"), label_a)
 
-        grid.attach_next_to(quitBtn, separator3, Gtk.PositionType.BOTTOM, 4, 2)
+        separator = Gtk.Separator()
+        grid.attach_next_to(separator, label_a, Gtk.PositionType.BOTTOM, 4, 2)
+
+        domain = getDomain()
+        if(domain == ""):
+            domain = _("Domain could not found")
+        label_a = create_label_and_attach(grid, domain, _("Domain:"), separator)
+        
+        workgroup = getWorkgroup()
+        if(workgroup == ""):
+            domain = _("Workgroup could not found")
+        
+        label_a = create_label_and_attach(grid, workgroup, _("Workgroup:"), label_a)
+        grid.attach_next_to(separator, label_a, Gtk.PositionType.BOTTOM, 4, 2)
+
+        quitBtn = Gtk.Button(label=_("Settings"))
+        quitBtn.set_size_request(80, 30)
+        quitBtn.connect("clicked", self.on_button_clicked)
+
+        separator = Gtk.Separator()
+        grid.attach_next_to(separator, label_a, Gtk.PositionType.BOTTOM, 4, 2)
+        grid.attach_next_to(quitBtn, separator, Gtk.PositionType.BOTTOM, 4, 2)
 
         window.show_all()
 

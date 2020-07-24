@@ -31,7 +31,6 @@ el = gettext.translation('base', 'locale', fallback=True)
 el.install()
 _ = el.gettext
 
-
 def execute(command):
     try:
         proc = subprocess.Popen("timeout " + BASHTIMEOUT + " " + command, stdout=subprocess.PIPE, shell=True)
@@ -104,7 +103,6 @@ class Controls(object):
         window.set_title(_("Controls"))
         window.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
         window.set_border_width(32)
-        #window.set_icon_from_file(summary.ICONDomain)
         window.set_default_size(400, 400)
         window.set_resizable(False)
 
@@ -119,172 +117,82 @@ class Controls(object):
         label1 = Gtk.Label(("<b>" + summary.getHostname() + "</b>"), use_markup=True)
         label1.set_halign(Gtk.Align.CENTER)
 
-        separator1 = Gtk.Separator()
-
-        label2 = Gtk.Label(getUsername())
-        label2.set_halign(Gtk.Align.START)
-        label2.set_direction(Gtk.TextDirection.LTR)
-        label2_a = Gtk.Label(_("Username: "))
-        label2_a.set_halign(Gtk.Align.END)
-        label2_a.set_direction(Gtk.TextDirection.LTR)
-
-        label3 = Gtk.Label(getBaseDir())
-        label3.set_halign(Gtk.Align.START)
-        label3.set_direction(Gtk.TextDirection.LTR)
-        label3_a = Gtk.Label(_("Getent control: "))
-        label3_a.set_halign(Gtk.Align.END)
-        label3_a.set_direction(Gtk.TextDirection.LTR)
+        separator = Gtk.Separator()
+        grid.attach(label1, 0, 0, 4, 1)
+        grid.attach_next_to(separator, label1, Gtk.PositionType.BOTTOM, 4, 2)
+        
+        label_a = summary.create_label_and_attach(grid, getUsername(), _("Username: "), separator)
+        label_a = summary.create_label_and_attach(grid, getBaseDir(), _("Getent control: "), label_a)
 
         domainname = getDomainName()
-        label4 = Gtk.Label(domainname)
         if domainname != "":
             pass
         else:
-            label4 = Gtk.Label(_("Fail"))
-
-        label4.set_halign(Gtk.Align.START)
-        label4.set_direction(Gtk.TextDirection.LTR)
-        label4_a = Gtk.Label(_("Domain control: "))
-        label4_a.set_halign(Gtk.Align.END)
-        label4_a.set_direction(Gtk.TextDirection.LTR)
+            domainname = _("Fail")
+        label_a = summary.create_label_and_attach(grid, domainname, _("Domain control: "), label_a)
 
         can_ping = getPing()
-        label5 = Gtk.Label(can_ping)
         if(can_ping != ""):
-            label5 = Gtk.Label(_("Success"))
+            can_ping = _("Success")
         else:
-            label5 = Gtk.Label(_("Fail"))
-
-        label5.set_halign(Gtk.Align.START)
-        label5.set_direction(Gtk.TextDirection.LTR)
-        label5_a = Gtk.Label(_("Ping control: "))
-        label5_a.set_halign(Gtk.Align.END)
-        label5_a.set_direction(Gtk.TextDirection.LTR)
+            can_ping = _("Fail")
+        label_a = summary.create_label_and_attach(grid, can_ping, _("Ping control: "), label_a)
 
         can_host = getHost()
-        label6 = Gtk.Label(can_host)
         if(can_host != ""):
-            label6 = Gtk.Label(_("Success"))
+            can_host = _("Success")
         else:
-            label6 = Gtk.Label(_("Fail"))
-        label6.set_halign(Gtk.Align.START)
-        label6.set_direction(Gtk.TextDirection.LTR)
-        label6_a = Gtk.Label(_("Host control: "))
-        label6_a.set_halign(Gtk.Align.END)
-        label6_a.set_direction(Gtk.TextDirection.LTR)
+            can_host = _("Fail")
+        label_a = summary.create_label_and_attach(grid, can_host, _("Host control: "), label_a)
 
-        # control if klist command exists
+        # # control if klist command exists
         if os.path.isfile("/etc/krb5.conf") is False:
             message.log_info("klist is not found")
         else:
             message.log_info("klist found")
 
         klist = getKlist()
-        label7 = Gtk.Label(klist)
         if(("no credentials cache found" in klist) or (klist == "")):
-            label7 = Gtk.Label(_("Fail"))
+            klist = _("Fail")
         else:
-            label7 = Gtk.Label(_("Success"))
+            klist = _("Success")
+        label_a = summary.create_label_and_attach(grid, klist, _("Klist control: "), label_a)
 
-        label7.set_halign(Gtk.Align.START)
-        label7.set_direction(Gtk.TextDirection.LTR)
-        label7_a = Gtk.Label(_("Klist control: "))
-        label7_a.set_halign(Gtk.Align.END)
-        label7_a.set_direction(Gtk.TextDirection.LTR)
-
-        # control if pam exists
+        # # control if pam exists
         if os.path.isfile("/etc/pam.d/common-session") is False:
             message.log_info("pam not found")
         else:
             message.log_info("pam found")
 
         pam = getPam()
-        label8 = Gtk.Label(pam)
         if(klist == ""):
-            label8 = Gtk.Label(_("Fail"))
+            pam = _("Fail")
         else:
-            label8 = Gtk.Label(_("Success"))
+            pam = _("Success")
+        label_a = summary.create_label_and_attach(grid, pam, _("Pam control: "), label_a)
 
-        label8.set_halign(Gtk.Align.START)
-        label8.set_direction(Gtk.TextDirection.LTR)
-        label8_a = Gtk.Label(_("Pam control: "))
-        label8_a.set_halign(Gtk.Align.END)
-        label8_a.set_direction(Gtk.TextDirection.LTR)
+        separator = Gtk.Separator()
+        grid.attach_next_to(separator, label_a, Gtk.PositionType.BOTTOM, 4, 2)
 
-        separator2 = Gtk.Separator()
+        label_a = summary.create_label_and_attach(grid, getNTPTime(getLDAP()), _("DC time: "), separator)
+        label_a = summary.create_label_and_attach(grid, getClientTime(), _("Client time: "), label_a)
 
-        label9 = Gtk.Label(getNTPTime(getLDAP()))
-        label9.set_halign(Gtk.Align.START)
-        label9.set_direction(Gtk.TextDirection.LTR)
-        label9_a = Gtk.Label(_("DC time: "))
-        label9_a.set_halign(Gtk.Align.END)
-        label9_a.set_direction(Gtk.TextDirection.LTR)
-
-        label10 = Gtk.Label(getClientTime())
-        label10.set_halign(Gtk.Align.START)
-        label10.set_direction(Gtk.TextDirection.LTR)
-        label10_a = Gtk.Label(_("Client time: "))
-        label10_a.set_halign(Gtk.Align.END)
-        label10_a.set_direction(Gtk.TextDirection.LTR)
-
-        separator3 = Gtk.Separator()
+        separator = Gtk.Separator()
+        grid.attach_next_to(separator, label_a, Gtk.PositionType.BOTTOM, 4, 2)
 
         sssd = getSssd()
-        label11 = Gtk.Label(sssd)
         if sssd == "active":
-            label11 = Gtk.Label(_("Active"))
+            sssd = _("Active")
         else:
-            label11 = Gtk.Label(_("Inactive"))
-
-        label11.set_halign(Gtk.Align.START)
-        label11.set_direction(Gtk.TextDirection.LTR)
-        label11_a = Gtk.Label(_("Sssd service control: "))
-        label11_a.set_halign(Gtk.Align.END)
-        label11_a.set_direction(Gtk.TextDirection.LTR)
+            sssd = _("Inactive")
+        label_a = summary.create_label_and_attach(grid, sssd, _("Sssd service control: "), separator
+        )
 
         smbd = getSmbd()
-        label12 = Gtk.Label(smbd)
         if smbd == "active":
-            label12 = Gtk.Label(_("Active"))
+            smbd = _("Active")
         else:
-            label12 = Gtk.Label(_("Inactive"))
-
-        label12.set_halign(Gtk.Align.START)
-        label12.set_direction(Gtk.TextDirection.LTR)
-        label12_a = Gtk.Label(_("Smbd service control: "))
-        label12_a.set_halign(Gtk.Align.END)
-        label12_a.set_direction(Gtk.TextDirection.LTR)
-
-        grid.attach(label1, 0, 0, 4, 1)
-        grid.attach_next_to(separator1, label1, Gtk.PositionType.BOTTOM, 4, 2)
-        grid.attach_next_to(label1, separator1, Gtk.PositionType.BOTTOM, 3, 2)
-
-        grid.attach_next_to(label2_a, separator1,
-                            Gtk.PositionType.BOTTOM, 1, 2)
-        grid.attach_next_to(label2, label2_a, Gtk.PositionType.RIGHT, 3, 2)
-        grid.attach_next_to(label3_a, label2_a, Gtk.PositionType.BOTTOM, 1, 2)
-        grid.attach_next_to(label3, label3_a, Gtk.PositionType.RIGHT, 3, 2)
-        grid.attach_next_to(label4_a, label3_a, Gtk.PositionType.BOTTOM, 1, 2)
-        grid.attach_next_to(label4, label4_a, Gtk.PositionType.RIGHT, 3, 2)
-        grid.attach_next_to(label5_a, label4_a, Gtk.PositionType.BOTTOM, 1, 2)
-        grid.attach_next_to(label5, label5_a, Gtk.PositionType.RIGHT, 3, 2)
-        grid.attach_next_to(label6_a, label5_a, Gtk.PositionType.BOTTOM, 1, 2)
-        grid.attach_next_to(label6, label6_a, Gtk.PositionType.RIGHT, 3, 2)
-        grid.attach_next_to(label7_a, label6_a, Gtk.PositionType.BOTTOM, 1, 2)
-        grid.attach_next_to(label7, label7_a, Gtk.PositionType.RIGHT, 3, 2)
-        grid.attach_next_to(label8_a, label7_a, Gtk.PositionType.BOTTOM, 1, 2)
-        grid.attach_next_to(label8, label8_a, Gtk.PositionType.RIGHT, 3, 2)
-
-        grid.attach_next_to(separator2, label8_a, Gtk.PositionType.BOTTOM, 4, 2)
-        grid.attach_next_to(label9_a, separator2, Gtk.PositionType.BOTTOM, 1, 2)
-        grid.attach_next_to(label9, label9_a, Gtk.PositionType.RIGHT, 3, 2)
-        grid.attach_next_to(label10_a, label9_a, Gtk.PositionType.BOTTOM, 1, 2)
-        grid.attach_next_to(label10, label10_a, Gtk.PositionType.RIGHT, 3, 2)
-
-        grid.attach_next_to(separator3, label10_a, Gtk.PositionType.BOTTOM, 4, 2)
-        grid.attach_next_to(label11_a, separator3, Gtk.PositionType.BOTTOM, 1, 2)
-        grid.attach_next_to(label11, label11_a, Gtk.PositionType.RIGHT, 3, 2)
-        grid.attach_next_to(label12_a, label11_a, Gtk.PositionType.BOTTOM, 1, 2)
-        grid.attach_next_to(label12, label12_a, Gtk.PositionType.RIGHT, 3, 2)
+            smbd = _("Inactive")
+        label_a = summary.create_label_and_attach(grid, smbd, _("Smbd service control: "), label_a)
 
         window.show_all()
