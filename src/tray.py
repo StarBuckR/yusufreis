@@ -54,7 +54,6 @@ class TrayIcon(Gtk.StatusIcon):
         self.menu.popup(None, None, None, self, 3, time)
 
     def get_notifications_interval(self):
-        # todo bildirimler tray ikona eklenecek, basınca bildirim ekranı gelecek
         notifications_window.get_notifications(self)
         return True
 

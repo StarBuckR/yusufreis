@@ -41,30 +41,36 @@ class Notifications(object):
         self.grid.set_halign(Gtk.Align.CENTER)
         self.grid.set_direction(Gtk.TextDirection.LTR)
 
-        # vp.set_size_request(300,400)
         sw.set_size_request(400, 400)
 
-        for i in range(self.count):
-            self.create_label(self.response['notifications'][i]['message'], i)
+        # for i in range(self.count):
+        #     label = self.create_label(, i)
+        if self.count > 0:
+            self.create_notifications()
 
         sw.add(self.grid)
-        # vp.add(box)
 
-        # sw.add(vp)
         self.window.add(sw)
         self.window.show_all()
 
-    def create_label(self, label_text, i):
-        label = Gtk.Label(
-            "<b><span font='20' background='#ebebeb' foreground='#000000'>{}</span></b>".format(label_text))
-        label.set_use_markup(True)
-        label.set_line_wrap(True)
+    def create_notifications(self):
+        separator = ""
+        for i in range(self.count):
+            label_text = self.response['notifications'][i]['message']
+            label = Gtk.Label(
+                "<b><span font='10' foreground='#000000'>{}</span></b>".format(label_text))
+            label.set_use_markup(True)
+            label.set_line_wrap(True)
 
-        label.set_direction(Gtk.TextDirection.LTR)
-        label.set_halign(Gtk.Align.CENTER)
-        label.set_vexpand(True)
-
-        self.grid.attach(label, 0, i, 1, 1)
+            label.set_direction(Gtk.TextDirection.LTR)
+            label.set_halign(Gtk.Align.CENTER)
+            label.set_vexpand(True)
+            if i == 0:
+                self.grid.attach(label, 0, 0, 4, 1)
+            else:
+                self.grid.attach_next_to(label, separator, Gtk.PositionType.BOTTOM, 3, 2)
+            separator = Gtk.Separator()
+            self.grid.attach_next_to(separator, label, Gtk.PositionType.BOTTOM, 4, 1)
 
     def get_notifications(self, tray):
         try:
