@@ -122,11 +122,14 @@ class Summary(object):
         domain = getDomain()
         if(domain == ""):
             domain = _("Domain could not found")
+            workgroup = ""
+        else:
+            workgroup = getWorkgroup()
+
         label_a = create_label_and_attach(grid, domain, _("Domain:"), separator)
         
-        workgroup = getWorkgroup()
         if(workgroup == ""):
-            domain = _("Workgroup could not found")
+            workgroup = _("Workgroup could not found")
         
         label_a = create_label_and_attach(grid, workgroup, _("Workgroup:"), label_a)
         grid.attach_next_to(separator, label_a, Gtk.PositionType.BOTTOM, 4, 2)
