@@ -4,10 +4,10 @@ import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, GdkPixbuf, GLib
 
-from PIL import Image, ImageGrab 
+from PIL import Image 
 
 import send, message, summary, controls, notifications
-import subprocess, gettext, sys
+import subprocess, gettext, sys, os
 
 el = gettext.translation('base', 'locale', fallback=True)
 el.install()
@@ -71,8 +71,8 @@ class TrayIcon(Gtk.StatusIcon):
 
     def on_send_click(self, button):
         try:
-            image = ImageGrab.grab()
-            image.save(summary.MAINDIR + 'image.jpg')
+            imagename = summary.MAINDIR + 'image.jpg'
+            os.system("import -window root "+imagename)
 
             self.send_window = send.Window()
             self.send_window.show_popup_window()
