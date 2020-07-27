@@ -33,7 +33,7 @@ class Notifications(object):
         self.response = ""
 
     def show_window(self):
-        sw = Gtk.ScrolledWindow()
+        self.sw = Gtk.ScrolledWindow()
         self.grid = Gtk.Grid()
 
         self.grid.set_row_spacing(10)
@@ -41,36 +41,50 @@ class Notifications(object):
         self.grid.set_halign(Gtk.Align.CENTER)
         self.grid.set_direction(Gtk.TextDirection.LTR)
 
-        sw.set_size_request(400, 400)
+        self.sw.set_size_request(400, 400)
 
         # for i in range(self.count):
         #     label = self.create_label(, i)
         if self.count > 0:
             self.create_notifications()
 
-        sw.add(self.grid)
+        self.sw.add(self.grid)
 
-        self.window.add(sw)
+        self.window.add(self.sw)
         self.window.show_all()
 
     def create_notifications(self):
         separator = ""
         for i in range(self.count):
+            overlay = Gtk.Overlay()
+            box = Gtk.Box()
+            
             label_text = self.response['notifications'][i]['message']
             label = Gtk.Label(
                 "<b><span font='10' foreground='#000000'>{}</span></b>".format(label_text))
             label.set_use_markup(True)
             label.set_line_wrap(True)
-
+            label.set_line_wrap_mode(0)
             label.set_direction(Gtk.TextDirection.LTR)
-            label.set_halign(Gtk.Align.CENTER)
+            label.set_alignment(0, 0)
             label.set_vexpand(True)
+            
+            button = Gtk.Button.new_from_icon_name("window-close-symbolic", Gtk.IconSize.BUTTON)
+            button.set_relief(Gtk.ReliefStyle.NONE)
+            button.set_receives_default(True)
+            button.set_size_request(1, 1)
+            button.connect("clicked", self.on_close_notification_click, label_text, i)
+
+            box.add(label)
+            box.add(button)
+            overlay.add(box)
             if i == 0:
-                self.grid.attach(label, 0, 0, 4, 1)
+                self.grid.attach(overlay, 0, 0, 3, 2)
             else:
-                self.grid.attach_next_to(label, separator, Gtk.PositionType.BOTTOM, 3, 2)
+                self.grid.attach_next_to(overlay, separator, Gtk.PositionType.BOTTOM, 3, 2)
             separator = Gtk.Separator()
-            self.grid.attach_next_to(separator, label, Gtk.PositionType.BOTTOM, 4, 1)
+            self.grid.attach_next_to(separator, overlay, Gtk.PositionType.BOTTOM, 4, 1)
+            
 
     def get_notifications(self, tray):
         try:
@@ -84,5 +98,19 @@ class Notifications(object):
                 tray.set_from_file(summary.MAINDIR + "images/notification.png")
             else:
                 tray.set_from_file(summary.MAINDIR + "images/notification.png")
+        except Exception as e:
+            message.log_error("Exception occurred: " + str(e))
+
+    def on_close_notification_click(self, button, notification_text, notification_index):
+        try:
+            hostname = controls.execute("hostname")
+            data = {
+                "machine_name": hostname,
+                "message": notification_text,
+                "index": notification_index
+            }
+
+            resp = requests.delete("http://localhost:3000/notifications", data=data).json()
+            message.log_info(resp)
         except Exception as e:
             message.log_error("Exception occurred: " + str(e))

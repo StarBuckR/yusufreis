@@ -5,3 +5,4 @@ image.jpg
 *.pot
 *.log
 logs
+packages
