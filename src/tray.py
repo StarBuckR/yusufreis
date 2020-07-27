@@ -4,7 +4,7 @@ import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, GdkPixbuf, GLib
 
-import pyscreenshot as ImageGrab
+from PIL import Image, ImageGrab 
 
 import send, message, summary, controls, notifications
 import subprocess, gettext, sys
