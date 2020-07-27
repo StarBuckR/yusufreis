@@ -30,7 +30,6 @@ MAINDIR = "/usr/share/hvl/projectx/"
 ICONDomain = os.path.join(MAINDIR+"images/", 'Domain-icon.png')
 ICONLocal = os.path.join(MAINDIR+"images/", 'Local-icon.png')
 
-
 def getDomain():
     return controls.execute("net ads info 2> /dev/null | grep Realm | cut -d':' -f2 | tr -d ' ' | tr -d '\n'")
     # cmd_domainname = "net ads info 2> /dev/null | grep Realm | cut -d':' -f2 | tr -d ' ' | tr -d '\n'"

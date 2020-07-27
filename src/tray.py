@@ -13,11 +13,10 @@ el = gettext.translation('base', 'locale', fallback=True)
 el.install()
 _ = el.gettext
 
-
 class TrayIcon(Gtk.StatusIcon):
     def __init__(self):
         Gtk.StatusIcon.__init__(self)
-
+        self.is_server_up = False
         self.set_from_file(summary.MAINDIR + "images/no-notification.png")
         self.set_tooltip_text(_("Tray Icon"))
 
@@ -42,9 +41,10 @@ class TrayIcon(Gtk.StatusIcon):
         self.menu_item1.connect("activate", self.on_controls_click)
         self.menu.append(self.menu_item1)
 
-        self.menu_item1 = Gtk.MenuItem(label=_("Send"))
-        self.menu_item1.connect("activate", self.on_send_click)
-        self.menu.append(self.menu_item1)
+        if self.is_server_up == True:
+            self.menu_item1 = Gtk.MenuItem(label=_("Send"))
+            self.menu_item1.connect("activate", self.on_send_click)
+            self.menu.append(self.menu_item1)
 
         self.menu_item2 = Gtk.MenuItem(label=_("Quit"))
         self.menu.append(self.menu_item2)

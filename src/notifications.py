@@ -14,12 +14,12 @@ el = gettext.translation('base', 'locale', fallback=True)
 el.install()
 _ = el.gettext
 
-
 class Notifications(object):
     BASE_KEY = "apps.gsettings-projectx"
 
     def __init__(self):
         settings = Gio.Settings.new(self.BASE_KEY)
+        self.get_notifications_address = settings.get_string("get-notifications")
         self.notifications_address = settings.get_string("notifications")
 
         self.window = Gtk.Window(type=Gtk.WindowType.TOPLEVEL)
@@ -43,8 +43,6 @@ class Notifications(object):
 
         self.sw.set_size_request(400, 400)
 
-        # for i in range(self.count):
-        #     label = self.create_label(, i)
         if self.count > 0:
             self.create_notifications()
 
@@ -92,13 +90,16 @@ class Notifications(object):
             data = {
                 "machine_name": hostname
             }
-            self.response = (requests.post(self.notifications_address, data=data)).json()
+            self.response = (requests.post(self.get_notifications_address, data=data)).json()
             self.count = self.response['count']
             if(self.count > 0):
                 tray.set_from_file(summary.MAINDIR + "images/notification.png")
             else:
                 tray.set_from_file(summary.MAINDIR + "images/notification.png")
+            tray.is_server_up = True
         except Exception as e:
+            tray.is_server_up = False
+            tray.set_from_file(summary.MAINDIR + "images/notification.png")
             message.log_error("Exception occurred: " + str(e))
 
     def on_close_notification_click(self, button, notification_text, notification_index):
@@ -110,7 +111,7 @@ class Notifications(object):
                 "index": notification_index
             }
 
-            resp = requests.delete("http://localhost:3000/notifications", data=data).json()
+            resp = requests.delete(self.notifications_address, data=data).json()
             message.log_info(resp)
         except Exception as e:
             message.log_error("Exception occurred: " + str(e))
