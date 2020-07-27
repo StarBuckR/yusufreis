@@ -15,7 +15,7 @@ el.install()
 _ = el.gettext
 
 class Notifications(object):
-    BASE_KEY = "apps.gsettings-projectx"
+    BASE_KEY = "apps.gsettings-yusufreis"
 
     def __init__(self):
         settings = Gio.Settings.new(self.BASE_KEY)
@@ -99,7 +99,7 @@ class Notifications(object):
             tray.is_server_up = True
         except Exception as e:
             tray.is_server_up = False
-            tray.set_from_file(summary.MAINDIR + "images/notification.png")
+            tray.set_from_file(summary.MAINDIR + "images/no-notification.png")
             message.log_error("Exception occurred: " + str(e))
 
     def on_close_notification_click(self, button, notification_text, notification_index):

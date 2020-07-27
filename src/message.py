@@ -4,7 +4,7 @@ gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 
 import logging, summary
-logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO, filename=summary.MAINDIR + "logs/projectx.log")
+logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO, filename=summary.MAINDIR + "logs/yusufreis.log")
 console = logging.StreamHandler()
 
 def log_error(error):

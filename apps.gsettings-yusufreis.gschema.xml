@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
-  <schema id="apps.gsettings-projectx" path="/apps/gsettings-projectx/">
+  <schema id="apps.gsettings-yusufreis" path="/apps/gsettings-yusufreis/">
     <key type="s" name="ipaddress">
       <default>'http://localhost:3000/users'</default>
       <summary>Ip Address</summary>

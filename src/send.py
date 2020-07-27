@@ -16,7 +16,7 @@ el.install()
 _ = el.gettext
 
 class Window(object):
-    BASE_KEY = "apps.gsettings-projectx"
+    BASE_KEY = "apps.gsettings-yusufreis"
     def __init__(self):
         # GSettings key
         settings = Gio.Settings.new(self.BASE_KEY)
