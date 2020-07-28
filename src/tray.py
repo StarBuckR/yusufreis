@@ -13,6 +13,11 @@ el = gettext.translation('base', 'locale', fallback=True)
 el.install()
 _ = el.gettext
 
+send_window = ""
+summary_window = ""
+controls_window = ""
+notifications_window = ""
+
 class TrayIcon(Gtk.StatusIcon):
     def __init__(self):
         Gtk.StatusIcon.__init__(self)
@@ -57,25 +62,24 @@ class TrayIcon(Gtk.StatusIcon):
         notifications_window.get_notifications(self)
         return True
 
-    def on_click(self, button, time):
-        print("Left clicked")
+    def on_click(self, button):
+        summary_window.show_window()
 
     def on_notifications_click(self, button):
         notifications_window.show_window()
 
     def on_summary_click(self, button):
-        summary.Summary()
+        summary_window.show_window()
     
     def on_controls_click(self, button):
-        controls.Controls()
+        controls_window.show_window()
 
     def on_send_click(self, button):
         try:
             imagename = summary.MAINDIR + 'image.jpg'
             os.system("import -window root "+imagename)
 
-            self.send_window = send.Window()
-            self.send_window.show_popup_window()
+            send_window.show_window()
         except Exception as e:
             message.log_error("Exception occured: " + str(e))
             message.MessageDialogWindow().error_dialog(_("Error"), 
@@ -84,7 +88,10 @@ class TrayIcon(Gtk.StatusIcon):
 
 if __name__ == '__main__':
     notifications_window = notifications.Notifications()
-    
+    summary_window = summary.Summary()
+    send_window = send.Send()
+    controls_window = controls.Controls()
+
     tray = TrayIcon()
 
     # control notifications every 5 seconds

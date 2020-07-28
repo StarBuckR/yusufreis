@@ -71,26 +71,29 @@ def create_label_and_attach(grid, label_text, label_a_text, attach_next_to):
 
 class Summary(object):
     def __init__(self):
-        window = Gtk.Window(type=Gtk.WindowType.TOPLEVEL)
-        window.set_title(_("Summary"))
-        window.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
-        window.set_border_width(32)
-        window.set_icon_from_file(ICONDomain)
-        window.set_default_size(400, 400)
-        window.set_resizable(False)
+        self.is_window_open = False
 
-        grid = Gtk.Grid()
-        grid.set_row_spacing(5)
-        grid.set_column_spacing(5)
-        grid.set_halign(Gtk.Align.CENTER)
-        grid.set_direction(Gtk.TextDirection.LTR)
+        self.window = Gtk.Window(type=Gtk.WindowType.TOPLEVEL)
+        self.window.set_title(_("Summary"))
+        self.window.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
+        self.window.set_border_width(32)
+        self.window.set_icon_from_file(ICONDomain)
+        self.window.set_default_size(400, 400)
+        self.window.set_resizable(False)
 
-        window.add(grid)
+        self.grid = Gtk.Grid()
+        self.grid.set_row_spacing(5)
+        self.grid.set_column_spacing(5)
+        self.grid.set_halign(Gtk.Align.CENTER)
+        self.grid.set_direction(Gtk.TextDirection.LTR)
 
-        label1 = Gtk.Label(("<b>"+getHostname()+"</b>"), use_markup=True)
+    def show_window(self):
+        if self.is_window_open == True:
+            return
+
+        label1 = Gtk.Label(label=("<b>"+getHostname()+"</b>"), use_markup=True)
         label1.set_halign(Gtk.Align.CENTER)
-        grid.attach(label1, 0, 0, 4, 1)
-
+        self.grid.attach(label1, 0, 0, 4, 1)
 
         if (getDomain() != ""):
             pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(
@@ -106,17 +109,17 @@ class Summary(object):
                 preserve_aspect_ratio=True)
 
         image1 = Gtk.Image.new_from_pixbuf(pixbuf)
-        grid.attach_next_to(image1, label1, Gtk.PositionType.BOTTOM, 4, 2)
+        self.grid.attach_next_to(image1, label1, Gtk.PositionType.BOTTOM, 4, 2)
 
         separator1 = Gtk.Separator()
-        grid.attach_next_to(separator1, image1, Gtk.PositionType.BOTTOM, 4, 2)
+        self.grid.attach_next_to(separator1, image1, Gtk.PositionType.BOTTOM, 4, 2)
 
-        label_a = create_label_and_attach(grid, getDist(), _("OS:"), separator1)
-        label_a = create_label_and_attach(grid, getCPU(), _("CPU:"), label_a)
-        label_a = create_label_and_attach(grid, getRAM(), _("RAM:"), label_a)
+        label_a = create_label_and_attach(self.grid, getDist(), _("OS:"), separator1)
+        label_a = create_label_and_attach(self.grid, getCPU(), _("CPU:"), label_a)
+        label_a = create_label_and_attach(self.grid, getRAM(), _("RAM:"), label_a)
 
         separator = Gtk.Separator()
-        grid.attach_next_to(separator, label_a, Gtk.PositionType.BOTTOM, 4, 2)
+        self.grid.attach_next_to(separator, label_a, Gtk.PositionType.BOTTOM, 4, 2)
 
         domain = getDomain()
         if(domain == ""):
@@ -125,23 +128,29 @@ class Summary(object):
         else:
             workgroup = getWorkgroup()
 
-        label_a = create_label_and_attach(grid, domain, _("Domain:"), separator)
+        label_a = create_label_and_attach(self.grid, domain, _("Domain:"), separator)
         
         if(workgroup == ""):
             workgroup = _("Workgroup could not found")
         
-        label_a = create_label_and_attach(grid, workgroup, _("Workgroup:"), label_a)
-        grid.attach_next_to(separator, label_a, Gtk.PositionType.BOTTOM, 4, 2)
+        label_a = create_label_and_attach(self.grid, workgroup, _("Workgroup:"), label_a)
+        self.grid.attach_next_to(separator, label_a, Gtk.PositionType.BOTTOM, 4, 2)
 
         quitBtn = Gtk.Button(label=_("Settings"))
         quitBtn.set_size_request(80, 30)
         quitBtn.connect("clicked", self.on_button_clicked)
 
         separator = Gtk.Separator()
-        grid.attach_next_to(separator, label_a, Gtk.PositionType.BOTTOM, 4, 2)
-        grid.attach_next_to(quitBtn, separator, Gtk.PositionType.BOTTOM, 4, 2)
+        self.grid.attach_next_to(separator, label_a, Gtk.PositionType.BOTTOM, 4, 2)
+        self.grid.attach_next_to(quitBtn, separator, Gtk.PositionType.BOTTOM, 4, 2)
 
-        window.show_all()
+        self.window.connect('delete-event', self.on_delete_event)
+        self.is_window_open = True
+        self.window.add(self.grid)
+        self.window.show_all()
+
+    def on_delete_event(self, control, button):
+        self.is_window_open = False
 
     def on_button_clicked(self, widget):
         print("Settings")

@@ -98,52 +98,55 @@ def getPam():
 
 class Controls(object):
     def __init__(self):
+        self.is_window_open = False
         # ana pencere bileşeni
-        window = Gtk.Window(type=Gtk.WindowType.TOPLEVEL)
-        window.set_title(_("Controls"))
-        window.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
-        window.set_border_width(32)
-        window.set_default_size(400, 400)
-        window.set_resizable(False)
+        self.window = Gtk.Window(type=Gtk.WindowType.TOPLEVEL)
+        self.window.set_title(_("Controls"))
+        self.window.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
+        self.window.set_border_width(32)
+        self.window.set_default_size(400, 400)
+        self.window.set_resizable(False)
 
-        grid = Gtk.Grid()
-        grid.set_row_spacing(5)
-        grid.set_column_spacing(5)
-        grid.set_halign(Gtk.Align.CENTER)
-        grid.set_direction(Gtk.TextDirection.LTR)
-
-        window.add(grid)
-
-        label1 = Gtk.Label(("<b>" + summary.getHostname() + "</b>"), use_markup=True)
+        self.grid = Gtk.Grid()
+        self.grid.set_row_spacing(5)
+        self.grid.set_column_spacing(5)
+        self.grid.set_halign(Gtk.Align.CENTER)
+        self.grid.set_direction(Gtk.TextDirection.LTR)
+    
+    def show_window(self):
+        if self.is_window_open == True:
+            return
+        
+        label1 = Gtk.Label(label=("<b>" + summary.getHostname() + "</b>"), use_markup=True)
         label1.set_halign(Gtk.Align.CENTER)
 
         separator = Gtk.Separator()
-        grid.attach(label1, 0, 0, 4, 1)
-        grid.attach_next_to(separator, label1, Gtk.PositionType.BOTTOM, 4, 2)
+        self.grid.attach(label1, 0, 0, 4, 1)
+        self.grid.attach_next_to(separator, label1, Gtk.PositionType.BOTTOM, 4, 2)
         
-        label_a = summary.create_label_and_attach(grid, getUsername(), _("Username: "), separator)
-        label_a = summary.create_label_and_attach(grid, getBaseDir(), _("Getent control: "), label_a)
+        label_a = summary.create_label_and_attach(self.grid, getUsername(), _("Username: "), separator)
+        label_a = summary.create_label_and_attach(self.grid, getBaseDir(), _("Getent control: "), label_a)
 
         domainname = getDomainName()
         if domainname != "":
             pass
         else:
             domainname = _("Fail")
-        label_a = summary.create_label_and_attach(grid, domainname, _("Domain control: "), label_a)
+        label_a = summary.create_label_and_attach(self.grid, domainname, _("Domain control: "), label_a)
 
         can_ping = getPing()
         if(can_ping != ""):
             can_ping = _("Success")
         else:
             can_ping = _("Fail")
-        label_a = summary.create_label_and_attach(grid, can_ping, _("Ping control: "), label_a)
+        label_a = summary.create_label_and_attach(self.grid, can_ping, _("Ping control: "), label_a)
 
         can_host = getHost()
         if(can_host != ""):
             can_host = _("Success")
         else:
             can_host = _("Fail")
-        label_a = summary.create_label_and_attach(grid, can_host, _("Host control: "), label_a)
+        label_a = summary.create_label_and_attach(self.grid, can_host, _("Host control: "), label_a)
 
         # # control if klist command exists
         if os.path.isfile("/etc/krb5.conf") is False:
@@ -156,7 +159,7 @@ class Controls(object):
             klist = _("Fail")
         else:
             klist = _("Success")
-        label_a = summary.create_label_and_attach(grid, klist, _("Klist control: "), label_a)
+        label_a = summary.create_label_and_attach(self.grid, klist, _("Klist control: "), label_a)
 
         # # control if pam exists
         if os.path.isfile("/etc/pam.d/common-session") is False:
@@ -169,23 +172,23 @@ class Controls(object):
             pam = _("Fail")
         else:
             pam = _("Success")
-        label_a = summary.create_label_and_attach(grid, pam, _("Pam control: "), label_a)
+        label_a = summary.create_label_and_attach(self.grid, pam, _("Pam control: "), label_a)
 
         separator = Gtk.Separator()
-        grid.attach_next_to(separator, label_a, Gtk.PositionType.BOTTOM, 4, 2)
+        self.grid.attach_next_to(separator, label_a, Gtk.PositionType.BOTTOM, 4, 2)
 
-        label_a = summary.create_label_and_attach(grid, getNTPTime(getLDAP()), _("DC time: "), separator)
-        label_a = summary.create_label_and_attach(grid, getClientTime(), _("Client time: "), label_a)
+        label_a = summary.create_label_and_attach(self.grid, getNTPTime(getLDAP()), _("DC time: "), separator)
+        label_a = summary.create_label_and_attach(self.grid, getClientTime(), _("Client time: "), label_a)
 
         separator = Gtk.Separator()
-        grid.attach_next_to(separator, label_a, Gtk.PositionType.BOTTOM, 4, 2)
+        self.grid.attach_next_to(separator, label_a, Gtk.PositionType.BOTTOM, 4, 2)
 
         sssd = getSssd()
         if sssd == "active":
             sssd = _("Active")
         else:
             sssd = _("Inactive")
-        label_a = summary.create_label_and_attach(grid, sssd, _("Sssd service control: "), separator
+        label_a = summary.create_label_and_attach(self.grid, sssd, _("Sssd service control: "), separator
         )
 
         smbd = getSmbd()
@@ -193,6 +196,12 @@ class Controls(object):
             smbd = _("Active")
         else:
             smbd = _("Inactive")
-        label_a = summary.create_label_and_attach(grid, smbd, _("Smbd service control: "), label_a)
+        label_a = summary.create_label_and_attach(self.grid, smbd, _("Smbd service control: "), label_a)
 
-        window.show_all()
+        self.window.connect('delete-event', self.on_delete_event)
+        self.is_window_open = True
+        self.window.add(self.grid)
+        self.window.show_all()
+
+    def on_delete_event(self, control, button):
+        self.is_window_open = False

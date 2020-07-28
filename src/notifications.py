@@ -18,6 +18,8 @@ class Notifications(object):
     BASE_KEY = "apps.gsettings-yusufreis"
 
     def __init__(self):
+        self.is_window_open = False
+
         settings = Gio.Settings.new(self.BASE_KEY)
         self.get_notifications_address = settings.get_string("get-notifications")
         self.notifications_address = settings.get_string("notifications")
@@ -33,6 +35,9 @@ class Notifications(object):
         self.response = ""
 
     def show_window(self):
+        if self.is_window_open == True:
+            return
+
         self.sw = Gtk.ScrolledWindow()
         self.grid = Gtk.Grid()
 
@@ -47,10 +52,13 @@ class Notifications(object):
             self.create_notifications()
 
         self.sw.add(self.grid)
-
+        self.window.connect('delete-event', self.on_delete_event)
+        self.is_window_open = True
         self.window.add(self.sw)
         self.window.show_all()
 
+    def on_delete_event(self, control, button):
+        self.is_window_open = False
     def create_notifications(self):
         separator = ""
         for i in range(self.count):
