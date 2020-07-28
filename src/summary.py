@@ -26,17 +26,13 @@ el.install()
 _ = el.gettext
 
 CURRDIR = os.path.dirname(os.path.abspath(__file__))
-# this maindir is for development, the commented one is for release
 MAINDIR = "/usr/share/hvl/yusufreis/"
-ICONDomain = os.path.join(MAINDIR+"images/", 'Domain-icon.png')
-ICONLocal = os.path.join(MAINDIR+"images/", 'Local-icon.png')
+ICONDomain = os.path.join(MAINDIR+"images/", 'Domain.png')
+ICONLocal = os.path.join(MAINDIR+"images/", 'Local.png')
+ICONComputer = os.path.join(MAINDIR+"images/", 'Computer.png')
 
 def getDomain():
     return controls.execute("net ads info 2> /dev/null | grep Realm | cut -d':' -f2 | tr -d ' ' | tr -d '\n'")
-    # cmd_domainname = "net ads info 2> /dev/null | grep Realm | cut -d':' -f2 | tr -d ' ' | tr -d '\n'"
-    # domainname = subprocess.check_output((cmd_domainname), shell=True)
-    # domainname = domainname.decode('UTF-8')
-    # return(domainname)
 
 def getWorkgroup():
     return controls.execute("net ads workgroup | cut -d':' -f2 | tr -d ' ' | tr -d '\n'")
@@ -145,6 +141,7 @@ class Summary(object):
         self.grid.attach_next_to(separator, label_a, Gtk.PositionType.BOTTOM, 4, 2)
         self.grid.attach_next_to(quitBtn, separator, Gtk.PositionType.BOTTOM, 4, 2)
 
+        self.window.set_icon_from_file(ICONComputer)
         self.window.connect('delete-event', self.on_delete_event)
         self.is_window_open = True
         self.window.add(self.grid)

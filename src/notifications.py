@@ -52,6 +52,8 @@ class Notifications(object):
             self.create_notifications()
 
         self.sw.add(self.grid)
+
+        self.window.set_icon_from_file(summary.ICONComputer)
         self.window.connect('delete-event', self.on_delete_event)
         self.is_window_open = True
         self.window.add(self.sw)
@@ -101,13 +103,13 @@ class Notifications(object):
             self.response = (requests.post(self.get_notifications_address, data=data)).json()
             self.count = self.response['count']
             if(self.count > 0):
-                tray.set_from_file(summary.MAINDIR + "images/notification.png")
+                tray.set_from_file(summary.MAINDIR + "images/Notification.png")
             else:
-                tray.set_from_file(summary.MAINDIR + "images/notification.png")
+                tray.set_from_file(summary.MAINDIR + "images/Computer.png")
             tray.is_server_up = True
         except Exception as e:
             tray.is_server_up = False
-            tray.set_from_file(summary.MAINDIR + "images/no-notification.png")
+            tray.set_from_file(summary.MAINDIR + "images/Computer.png")
             message.log_error("Exception occurred: " + str(e))
 
     def on_close_notification_click(self, button, notification_text, notification_index):

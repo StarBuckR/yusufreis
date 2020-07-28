@@ -107,6 +107,7 @@ class Settings(object):
 
         self.grid.attach_next_to(button, separator1, Gtk.PositionType.BOTTOM, 4, 2)
 
+        self.window.set_icon_from_file(summary.ICONComputer)
         self.window.connect('delete-event', self.on_delete_event)
         self.is_window_open = True
         self.window.add(self.grid)

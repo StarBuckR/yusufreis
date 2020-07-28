@@ -64,6 +64,7 @@ class Send(object):
         self.grid.attach_next_to(send_button, self.textview, Gtk.PositionType.BOTTOM, 50, 10)
         self.grid.attach_next_to(cancel_button, send_button, Gtk.PositionType.RIGHT, 50, 10)
         
+        self.window.set_icon_from_file(summary.ICONComputer)
         self.window.connect('delete-event', self.on_delete_event)
         self.is_window_open = True
         self.window.add(self.grid)

@@ -23,9 +23,9 @@ class TrayIcon(Gtk.StatusIcon):
     def __init__(self):
         Gtk.StatusIcon.__init__(self)
         self.is_server_up = False
-        self.set_from_file(summary.MAINDIR + "images/no-notification.png")
+        self.set_from_file(summary.MAINDIR + "images/Computer.png")
         self.set_tooltip_text(_("Tray Icon"))
-
+        
         self.set_has_tooltip(True)
         self.set_visible(True)
         self.connect("popup_menu", self.on_secondary_click)

@@ -24,7 +24,18 @@ Description: yusufreis
 find ./ -type f ! -regex '.*?DEBIAN.*' -exec md5sum {} \; > packages/DEBIAN/md5sums
 echo """chmod +x /usr/local/bin/yusufreis
 cp /usr/share/hvl/yusufreis/apps.gsettings-yusufreis.gschema.xml /usr/share/glib-2.0/schemas/
-glib-compile-schemas /usr/share/glib-2.0/schemas/""" > packages/DEBIAN/postinst
+glib-compile-schemas /usr/share/glib-2.0/schemas/""" >> packages/DEBIAN/postinst
+
+echo """ echo \"\"\"#!/usr/bin/env xdg-open
+[Desktop Entry]
+Version=0.1
+Type=Application
+Terminal=false
+Exec=/usr/local/bin/yusufreis
+Name=YusufReis
+Comment=YusufReis
+Icon=/usr/share/hvl/yusufreis/images/Computer.png\"\"\" > /usr/share/applications/yusufreis.desktop""" >> packages/DEBIAN/postinst
+
 chmod +x packages/DEBIAN/postinst
 version=$(date +'%Y%m%d-%H%M%S')
 dpkg-deb -Zgzip --build ./packages yusufreis_$version.deb

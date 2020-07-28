@@ -198,6 +198,7 @@ class Controls(object):
             smbd = _("Inactive")
         label_a = summary.create_label_and_attach(self.grid, smbd, _("Smbd service control: "), label_a)
 
+        self.window.set_icon_from_file(summary.ICONComputer)
         self.window.connect('delete-event', self.on_delete_event)
         self.is_window_open = True
         self.window.add(self.grid)
