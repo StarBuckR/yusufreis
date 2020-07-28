@@ -165,3 +165,30 @@ msgstr "Smdb servis kontrolü: "
 
 msgid "Notifications"
 msgstr "Bildirimler"
+
+msgid "User is in domain"
+msgstr "Kullanıcı Domain'de"
+
+msgid "User is in not domain"
+msgstr "Kullanıcı Domain'de değil"
+
+msgid "Local Username:"
+msgstr "Local Kullanıcı Adı:"
+
+msgid "Local Password:"
+msgstr "Local Şifresi:"
+
+msgid "Domain Username:"
+msgstr "Domain Kullanıcı Adı:"
+
+msgid "Domain Password:"
+msgstr "Domain Şifresi:"
+
+msgid "Domain Name:"
+msgstr "Domain Adı:"
+
+msgid "Leave Domain"
+msgstr "Domain'den Çık"
+
+msgid "Join Domain"
+msgstr "Domain'e Katıl"

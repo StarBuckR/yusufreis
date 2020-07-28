@@ -6,7 +6,7 @@ from gi.repository import Gtk, GdkPixbuf, GLib
 
 from PIL import Image 
 
-import send, message, summary, controls, notifications
+import send, message, summary, controls, notifications, settings
 import subprocess, gettext, sys, os
 
 el = gettext.translation('base', 'locale', fallback=True)
@@ -17,6 +17,7 @@ send_window = ""
 summary_window = ""
 controls_window = ""
 notifications_window = ""
+settings_window = ""
 
 class TrayIcon(Gtk.StatusIcon):
     def __init__(self):
@@ -63,13 +64,13 @@ class TrayIcon(Gtk.StatusIcon):
         return True
 
     def on_click(self, button):
-        summary_window.show_window()
+        summary_window.show_window(self)
 
     def on_notifications_click(self, button):
         notifications_window.show_window()
 
     def on_summary_click(self, button):
-        summary_window.show_window()
+        summary_window.show_window(self)
     
     def on_controls_click(self, button):
         controls_window.show_window()
@@ -84,13 +85,16 @@ class TrayIcon(Gtk.StatusIcon):
             message.log_error("Exception occured: " + str(e))
             message.MessageDialogWindow().error_dialog(_("Error"), 
                 _("There has been an error while taking a screenshot. Please try again later"))
-            
+    
+    def show_settings_window(self):
+        settings_window.show_window()
 
 if __name__ == '__main__':
     notifications_window = notifications.Notifications()
     summary_window = summary.Summary()
     send_window = send.Send()
     controls_window = controls.Controls()
+    settings_window = settings.Settings()
 
     tray = TrayIcon()
 

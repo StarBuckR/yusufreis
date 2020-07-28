@@ -19,6 +19,7 @@ import subprocess
 import gettext
 import locale
 import controls
+import socket
 
 el = gettext.translation('base', 'locale', fallback=True)
 el.install()
@@ -87,7 +88,7 @@ class Summary(object):
         self.grid.set_halign(Gtk.Align.CENTER)
         self.grid.set_direction(Gtk.TextDirection.LTR)
 
-    def show_window(self):
+    def show_window(self, tray):
         if self.is_window_open == True:
             return
 
@@ -138,7 +139,7 @@ class Summary(object):
 
         quitBtn = Gtk.Button(label=_("Settings"))
         quitBtn.set_size_request(80, 30)
-        quitBtn.connect("clicked", self.on_button_clicked)
+        quitBtn.connect("clicked", self.on_settings_clicked, tray)
 
         separator = Gtk.Separator()
         self.grid.attach_next_to(separator, label_a, Gtk.PositionType.BOTTOM, 4, 2)
@@ -152,9 +153,8 @@ class Summary(object):
     def on_delete_event(self, control, button):
         self.is_window_open = False
 
-    def on_button_clicked(self, widget):
-        print("Settings")
-        #Gtk.main_quit()
+    def on_settings_clicked(self, widget, tray):
+        tray.show_settings_window()
 
     def on_degisim_ornekozellik(self, settings, key, check_button):
         check_button.set_active(settings.get_boolean("ornekozellik"))
