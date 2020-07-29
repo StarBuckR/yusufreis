@@ -3,6 +3,7 @@
 mkdir -p packages/DEBIAN
 mkdir -p packages/usr/local/bin/
 mkdir -p packages/usr/share/hvl/yusufreis/
+mkdir -p logs
 
 echo """#!/bin/bash
 python3 /usr/share/hvl/yusufreis/src/tray.py""" > packages/usr/local/bin/yusufreis
@@ -16,7 +17,7 @@ Version: $version
 Installed-Size: $size
 Maintainer: Ridvan Tulemen <ridvantulemen@gmail.com>
 Date : $date
-Depends: python3-pil, python3-gi, graphicsmagick-imagemagick-compat
+Depends: python3-pil, python3-gi, graphicsmagick-imagemagick-compat, gir1.2-appindicator3-0.1
 Architecture: amd64
 Description: yusufreis
 """ > packages/DEBIAN/control

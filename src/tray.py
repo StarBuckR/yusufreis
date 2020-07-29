@@ -24,7 +24,8 @@ class TrayIcon(Gtk.StatusIcon):
         Gtk.StatusIcon.__init__(self)
         self.is_server_up = False
         self.set_from_file(summary.MAINDIR + "images/Computer.png")
-        self.set_tooltip_text(_("Tray Icon"))
+        self.set_tooltip_text("Yusufreis")
+        self.set_title("Yusufreis")
         
         self.set_has_tooltip(True)
         self.set_visible(True)
