@@ -192,3 +192,6 @@ msgstr "Domain'den Çık"
 
 msgid "Join Domain"
 msgstr "Domain'e Katıl"
+
+msgid "Loading..."
+msgstr "Yükleniyor..."

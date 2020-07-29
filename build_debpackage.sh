@@ -4,6 +4,7 @@ mkdir -p packages/DEBIAN
 mkdir -p packages/usr/local/bin/
 mkdir -p packages/usr/share/hvl/yusufreis/
 mkdir -p logs
+touch logs/yusufreis.log
 
 echo """#!/bin/bash
 python3 /usr/share/hvl/yusufreis/src/tray.py""" > packages/usr/local/bin/yusufreis
@@ -25,7 +26,8 @@ Description: yusufreis
 find ./ -type f ! -regex '.*?DEBIAN.*' -exec md5sum {} \; > packages/DEBIAN/md5sums
 echo """chmod +x /usr/local/bin/yusufreis
 cp /usr/share/hvl/yusufreis/apps.gsettings-yusufreis.gschema.xml /usr/share/glib-2.0/schemas/
-glib-compile-schemas /usr/share/glib-2.0/schemas/""" >> packages/DEBIAN/postinst
+glib-compile-schemas /usr/share/glib-2.0/schemas/
+chmod -R o+w /usr/share/hvl/yusufreis/logs/""" >> packages/DEBIAN/postinst
 
 echo """ echo \"\"\"#!/usr/bin/env xdg-open
 [Desktop Entry]

@@ -2,11 +2,11 @@
 
 import gi
 gi.require_version("Gtk", "3.0")
-from gi.repository import Gtk, GdkPixbuf, GLib
+from gi.repository import Gtk, GLib
 
 from PIL import Image 
 
-import send, message, summary, controls, notifications, settings
+import send, message, summary, controls, notifications, settings, loading
 import subprocess, gettext, sys, os
 
 el = gettext.translation('base', 'locale', fallback=True)
@@ -65,18 +65,46 @@ class TrayIcon(Gtk.StatusIcon):
         return True
 
     def on_click(self, button):
+        loading_window = loading.Loading()
+        while Gtk.events_pending():
+            Gtk.main_iteration(),
+
         summary_window.show_window(self)
+
+        loading_window.destroy()
 
     def on_notifications_click(self, button):
+        loading_window = loading.Loading()
+        while Gtk.events_pending():
+            Gtk.main_iteration()
+
         notifications_window.show_window()
 
+        loading_window.destroy()
+
     def on_summary_click(self, button):
+        loading_window = loading.Loading()
+        while Gtk.events_pending():
+            Gtk.main_iteration()
+
         summary_window.show_window(self)
+
+        loading_window.destroy()
     
     def on_controls_click(self, button):
+        loading_window = loading.Loading()
+        while Gtk.events_pending():
+            Gtk.main_iteration()
+        
         controls_window.show_window()
 
+        loading_window.destroy()
+
     def on_send_click(self, button):
+        loading_window = loading.Loading()
+        while Gtk.events_pending():
+            Gtk.main_iteration()
+
         try:
             imagename = summary.MAINDIR + 'image.jpg'
             os.system("import -window root "+imagename)
@@ -86,9 +114,17 @@ class TrayIcon(Gtk.StatusIcon):
             message.log_error("Exception occured: " + str(e))
             message.MessageDialogWindow().error_dialog(_("Error"), 
                 _("There has been an error while taking a screenshot. Please try again later"))
-    
+        
+        loading_window.destroy()
+        
     def show_settings_window(self):
+        loading_window = loading.Loading()
+        while Gtk.events_pending():
+            Gtk.main_iteration()
+
         settings_window.show_window()
+
+        loading_window.destroy()
 
 if __name__ == '__main__':
     notifications_window = notifications.Notifications()
