@@ -23,6 +23,7 @@ jobs:
         python3 /usr/share/hvl/yusufreis/src/tray.py""" > packages/usr/local/bin/yusufreis
         cp -r images locale src apps.gsettings-yusufreis.gschema.xml packages/usr/share/hvl/yusufreis
         mkdir -p packages/usr/share/hvl/yusufreis/logs
+        chmod o+w packages/usr/share/hvl/yusufreis/logs
         size=$(du -s ./ | cut -f 1)
         v=$(date +'%Y%m%d-%H%M%S')
         version=${{ steps.build_package.outputs.tag }}"-"$v
