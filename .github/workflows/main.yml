@@ -37,6 +37,15 @@ jobs:
         Architecture: amd64
         Description: yusufreis
         """ > packages/DEBIAN/control
+        echo """ echo \"\"\"#!/usr/bin/env xdg-open
+        [Desktop Entry]
+        Version=0.1
+        Type=Application
+        Terminal=false
+        Exec=/usr/local/bin/yusufreis
+        Name=YusufReis
+        Comment=YusufReis
+        Icon=/usr/share/hvl/yusufreis/images/Computer.png\"\"\" > /usr/share/applications/yusufreis.desktop""" >> packages/DEBIAN/postinst
         find ./ -type f ! -regex '.*?DEBIAN.*' -exec md5sum {} \; > packages/DEBIAN/md5sums
         echo """chmod +x /usr/local/bin/yusufreis
         cp /usr/share/hvl/yusufreis/apps.gsettings-yusufreis.gschema.xml /usr/share/glib-2.0/schemas/
