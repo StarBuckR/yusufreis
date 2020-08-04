@@ -13,7 +13,7 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt install graphicsmagick-imagemagick-compat
-        sudo apt install python3-gi
+        sudo apt install python3-gi 
         sudo apt install python3-pil
         mkdir -p packages/DEBIAN
         mkdir -p packages/usr/local/bin/
