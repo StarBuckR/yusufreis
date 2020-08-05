@@ -3,7 +3,7 @@ import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 
-import logging, summary
+import logging, summary, controls
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO, filename=summary.MAINDIR + "logs/yusufreis.log")
 console = logging.StreamHandler()
 
@@ -76,20 +76,20 @@ class MessageDialogWindow(Gtk.Window):
 
         dialog.destroy()
 
-    def question_dialog(self, widget):
+    def question_reboot_dialog(self):
         dialog = Gtk.MessageDialog(
             self,
             0,
             Gtk.MessageType.QUESTION,
             Gtk.ButtonsType.YES_NO,
-            "This is an QUESTION MessageDialog",
+            _("Success"),
         )
         dialog.format_secondary_text(
-            "And this is the secondary text that explains things."
+            _("Click YES if you want to reboot now. Otherwise click NO and reboot yourself")
         )
         response = dialog.run()
         if response == Gtk.ResponseType.YES:
-            print("QUESTION dialog closed by clicking YES button")
+            controls.executeWithoutTimeout("systemctl reboot -i")
         elif response == Gtk.ResponseType.NO:
             print("QUESTION dialog closed by clicking NO button")
 

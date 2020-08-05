@@ -198,3 +198,9 @@ msgstr "Yükleniyor..."
 
 msgid "Palamar is not installed. Please try installing first"
 msgstr "Palamar yüklenmemiş. Lütfen önce yüklemeyi deneyin"
+
+msgid "Click YES if you want to reboot now. Otherwise click NO and reboot yourself"
+msgstr "Eğer şimdi yeniden başlatmak isterseniz EVET'e, daha sonra kendiniz yeniden başlatmak için HAYIR'a tıklayın"
+
+msgid "Ensure your credentails aren't blank"
+msgstr "Alanları boş bırakmadığınızdan emin olunuz"

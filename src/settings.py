@@ -76,7 +76,7 @@ class Settings(object):
         button = Gtk.Button(label=button_label)
         button.set_size_request(80, 30)
 
-        if is_in_domain == False: # this will be false in release
+        if is_in_domain == True: # this will be false in release
             button.connect("clicked", self.on_join_button_clicked)
             
             if checkConfigFiles() == False:
@@ -126,12 +126,20 @@ class Settings(object):
         self.is_window_open = False
     
     def on_join_button_clicked(self, button):
-        command = "pkexec sudo -S palamar -hostname '" + self.hostname_entry.get_text() + "' -domain_ip '" + self.domain_ip_entry.get_text()\
-            + "' -username '" + self.domain_username_entry.get_text() + "' -password '" + self.domain_pass_entry.get_text() + "'"
+        hostname = self.hostname_entry.get_text().strip()
+        domain_ip = self.domain_ip_entry.get_text().strip()
+        domain_username = self.domain_username_entry.get_text().strip()
+        password = self.domain_pass_entry.get_text().strip()
+        if hostname == "" or domain_ip == "" or domain_username == "" or password == "":
+            message.MessageDialogWindow().error_dialog(_("Error"), _("Ensure your credentails aren't blank"))
+            return
+
+        command = "pkexec sudo -S palamar -hostname '" + hostname + "' -domain_ip '" + domain_ip\
+            + "' -username '" + domain_username + "' -password '" + password + "'"
         
         output = controls.executeWithoutTimeout(command)
         if output != "":
-            message.MessageDialogWindow().info_dialog("Domain", _("Success"))
+            message.MessageDialogWindow().question_reboot_dialog()
         else:
             message.MessageDialogWindow().error_dialog("Domain", _("Fail"))
     
