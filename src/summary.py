@@ -9,9 +9,8 @@
 import gi
 
 gi.require_version("Gtk", "3.0")
-gi.require_version("AppIndicator3", "0.1")
 
-from gi.repository import Gio, Gtk, GdkPixbuf, AppIndicator3 as appindicator
+from gi.repository import Gio, Gtk, GdkPixbuf
 import os
 import sys
 import subprocess

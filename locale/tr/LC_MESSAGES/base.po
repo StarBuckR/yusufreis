@@ -166,11 +166,11 @@ msgstr "Smdb servis kontrolü: "
 msgid "Notifications"
 msgstr "Bildirimler"
 
-msgid "User is in domain"
-msgstr "Kullanıcı Domain'de"
+msgid "Machine is in domain"
+msgstr "Makine Domain'de"
 
-msgid "User is in not domain"
-msgstr "Kullanıcı Domain'de değil"
+msgid "Machine is in not domain"
+msgstr "Makine Domain'de değil"
 
 msgid "Local Username:"
 msgstr "Local Kullanıcı Adı:"
@@ -195,3 +195,6 @@ msgstr "Domain'e Katıl"
 
 msgid "Loading..."
 msgstr "Yükleniyor..."
+
+msgid "Palamar is not installed. Please try installing first"
+msgstr "Palamar yüklenmemiş. Lütfen önce yüklemeyi deneyin"

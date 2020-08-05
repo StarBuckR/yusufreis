@@ -43,7 +43,18 @@ def execute(command):
     except Exception as e:
         message.log_error("Exception occurred")
         return("")
+def executeWithoutTimeout(command):
+    try:
+        proc = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True)
+        (dist, err) = proc.communicate()
+        dist = dist.decode('UTF-8')
+        if(dist.strip() == ""):
+            message.log_info(command + " " + "returning null")
 
+        return(dist.strip())
+    except Exception as e:
+        message.log_error("Exception occurred")
+        return("")
 def getUsername():
     return execute("whoami")
 

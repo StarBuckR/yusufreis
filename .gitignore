@@ -5,5 +5,4 @@ image.jpg
 *.pot
 *.log
 *.deb
-logs
 packages

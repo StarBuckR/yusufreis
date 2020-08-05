@@ -18,7 +18,7 @@ Version: $version
 Installed-Size: $size
 Maintainer: Ridvan Tulemen <ridvantulemen@gmail.com>
 Date : $date
-Depends: python3-pil, python3-gi, graphicsmagick-imagemagick-compat, gir1.2-appindicator3-0.1
+Depends: python3-pil, python3-gi, graphicsmagick-imagemagick-compat
 Architecture: amd64
 Description: yusufreis
 """ > packages/DEBIAN/control

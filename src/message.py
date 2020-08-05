@@ -27,17 +27,15 @@ class MessageDialogWindow(Gtk.Window):
     def __init__(self):
         Gtk.Window.__init__(self, title="MessageDialog Example")
 
-    def info_dialog(self):
+    def info_dialog(self, message, secondary):
         dialog = Gtk.MessageDialog(
             self,
             0,
             Gtk.MessageType.INFO,
             Gtk.ButtonsType.OK,
-            "This is an INFO MessageDialog",
+            message,
         )
-        dialog.format_secondary_text(
-            "And this is the secondary text that explains things."
-        )
+        dialog.format_secondary_text(secondary)
         dialog.run()
         print("INFO dialog closed")
 
