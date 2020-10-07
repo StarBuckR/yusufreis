@@ -4,6 +4,7 @@ from gi.repository import Gtk, Gio, GdkPixbuf, Gdk
 
 import requests
 import subprocess
+import glob, os
 
 import base64
 from io import BytesIO
@@ -78,28 +79,26 @@ class Send(object):
             buffer = self.textview.get_buffer()
             text = buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter(), False)
             print(text)
-
+ 
             hostname = controls.execute("hostname")
-            username = controls.execute("whoami")
-            ip_address = controls.execute("ip route get 1.2.3.4 | awk '{printf $7}'")
-            
-            files = {
-                "image": open(summary.MAINDIR + 'image.jpg', 'rb')
-            }
-            base64_string = ""
-            with open(summary.MAINDIR + "image.jpg", "rb") as image_file:
-                base64_string = base64.b64encode(image_file.read())
+            username = controls.execute("whoami")           
+
+            list_of_files = glob.glob(summary.MAINDIR+'ss/*')
+            latest_file = max(list_of_files, key=os.path.getctime)
 
             data = {
-                "base64": base64_string,
-                "note": text,
                 "machine_name": hostname,
-                "ip_address": ip_address,
-                "username": username
+                "username": username,
+                "note": text,
+                "filename": latest_file
             }
+
+            file_object = open(summary.MAINDIR + "ss/main.json", 'a')
+            file_object.write("\n")
+            file_object.write(str(data))
+            file_object.close()
+
             # create new script that handles all api calls
-            response = requests.post(str(self.post_address), files=files, data=data)
-            message.log_info(response.text)
 
             self.window.close()
         except Exception as e:
