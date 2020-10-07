@@ -8,6 +8,8 @@ from PIL import Image
 
 import send, message, summary, controls, notifications, settings, loading
 import subprocess, gettext, sys, os
+import datetime
+
 
 el = gettext.translation('base', 'locale', fallback=True)
 el.install()
@@ -48,10 +50,9 @@ class TrayIcon(Gtk.StatusIcon):
         self.menu_item1.connect("activate", self.on_controls_click)
         self.menu.append(self.menu_item1)
 
-        if self.is_server_up == True:
-            self.menu_item1 = Gtk.MenuItem(label=_("Send"))
-            self.menu_item1.connect("activate", self.on_send_click)
-            self.menu.append(self.menu_item1)
+        self.menu_item1 = Gtk.MenuItem(label=_("Send"))
+        self.menu_item1.connect("activate", self.on_send_click)
+        self.menu.append(self.menu_item1)
 
         self.menu_item2 = Gtk.MenuItem(label=_("Quit"))
         self.menu.append(self.menu_item2)
@@ -106,9 +107,8 @@ class TrayIcon(Gtk.StatusIcon):
             Gtk.main_iteration()
 
         try:
-            imagename = summary.MAINDIR + 'image.jpg'
+            imagename = summary.MAINDIR + 'ss-' + datetime.datetime.now() + '.jpg'
             os.system("import -window root "+imagename)
-
             send_window.show_window()
         except Exception as e:
             message.log_error("Exception occured: " + str(e))
