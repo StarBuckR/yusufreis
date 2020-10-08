@@ -1,16 +1,16 @@
 # Projectx
 <p align="center">
-    <img src="https://raw.githubusercontent.com/StarBuckR/yusufreis/master/screenshots/Summary.png">    
+    <img src="https://raw.githubusercontent.com/aciklab/yusufreis/master/screenshots/Summary.png">    
 </p>
 
 <p align="center">
- <img alt="Build" src="https://github.com/StarBuckR/yusufreis/workflows/Yusufreis%20CI/badge.svg">
+ <img alt="Build" src="https://github.com/aciklab/yusufreis/workflows/Yusufreis%20CI/badge.svg">
 </p>
 
 # Install Directly From Latest .deb File (eg. Pardus 19.x, Debian 10, Ubuntu 18.04 and Ubuntu 20.04)
 ```
-curl -s https://api.github.com/repos/StarBuckR/yusufreis/releases/latest | grep "browser_download_url.*deb" | cut -d '"' -f 4 | wget -qi -
-sudo apt install -y  ./`curl -s https://api.github.com/repos/StarBuckR/yusufreis/releases/latest | grep "browser_download_url.*deb" | cut -d '"' -f 4 | grep -o '[^/]*$'`
+curl -s https://api.github.com/repos/aciklab/yusufreis/releases/latest | grep "browser_download_url.*deb" | cut -d '"' -f 4 | wget -qi -
+sudo apt install -y  ./`curl -s https://api.github.com/repos/aciklab/yusufreis/releases/latest | grep "browser_download_url.*deb" | cut -d '"' -f 4 | grep -o '[^/]*$'`
 ```
 ## Run 
 
@@ -26,7 +26,7 @@ LANGUAGE=tr yusufreis
 ```
 # Install From Source Code(Debian)
 ```
-git clone https://github.com/StarBuckR/yusufreis
+git clone https://github.com/aciklab/yusufreis
 cd yusufreis
 sudo bash build_debpackage.sh
 ```
@@ -61,5 +61,5 @@ LANGUAGE=tr python3 src/tray.py
 
 # Sample Window
 <p align="center">
-    <img src="https://raw.githubusercontent.com/StarBuckR/yusufreis/master/screenshots/Controls.png">    
+    <img src="https://raw.githubusercontent.com/aciklab/yusufreis/master/screenshots/Controls.png">    
 </p>
