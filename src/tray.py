@@ -107,7 +107,7 @@ class TrayIcon(Gtk.StatusIcon):
             Gtk.main_iteration()
 
         try:
-            imagename = summary.MAINDIR + 'ss/ss-' + datetime.datetime.now() + '.jpg'
+            imagename = summary.MAINDIR + 'ss/ss-' + str(datetime.datetime.now().timestamp()) + '.jpg'
             os.system("import -window root "+imagename)
             send_window.show_window()
         except Exception as e:
