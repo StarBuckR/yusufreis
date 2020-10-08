@@ -4,7 +4,7 @@ from gi.repository import Gtk, Gio, GdkPixbuf, Gdk
 
 import requests
 import subprocess
-import glob, os
+import glob, os, json, datetime
 
 import base64
 from io import BytesIO
@@ -46,7 +46,7 @@ class Send(object):
         self.textview.set_size_request(400, 200)
         self.textview.set_wrap_mode(Gtk.WrapMode.WORD)
         textbuffer = self.textview.get_buffer()
-        textbuffer.set_text(_("Start typing your note here"))
+        textbuffer.set_text(_(""))
 
         label = Gtk.Label(_("Note:"))
         label.set_direction(Gtk.TextDirection.LTR)
@@ -83,19 +83,23 @@ class Send(object):
             hostname = controls.execute("hostname")
             username = controls.execute("whoami")           
 
+
             list_of_files = glob.glob(summary.MAINDIR+'ss/*')
             latest_file = max(list_of_files, key=os.path.getctime)
 
-            data = {
+            data = []
+            data.append({
                 "machine_name": hostname,
                 "username": username,
                 "note": text,
                 "filename": latest_file
-            }
+            })
+
+            with open(summary.MAINDIR + "ss/main.json", "a") as outfile:
+                json.dump(data, outfile)
 
             file_object = open(summary.MAINDIR + "ss/main.json", 'a')
             file_object.write("\n")
-            file_object.write(str(data))
             file_object.close()
 
             # create new script that handles all api calls
