@@ -50,6 +50,7 @@ jobs:
         cp /usr/share/hvl/yusufreis/apps.gsettings-yusufreis.gschema.xml /usr/share/glib-2.0/schemas/
         glib-compile-schemas /usr/share/glib-2.0/schemas/
         mkdir -p '/usr/share/hvl/yusufreis/ss/'
+        touch /usr/share/hvl/yusufreis/logs/yusufreis.log
         chmod o+w /usr/share/hvl/yusufreis/logs/yusufreis.log
         chmod o+w -R /usr/share/hvl/yusufreis/ss/" > packages/DEBIAN/postinst
         chmod +x packages/DEBIAN/postinst
