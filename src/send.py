@@ -25,6 +25,7 @@ class Send(object):
         self.post_address = settings.get_string("ipaddress")
         print(self.post_address)
 
+    def show_window(self):
         self.window = Gtk.Window(type=Gtk.WindowType.TOPLEVEL)
         self.window.set_title(_("Send"))
         self.window.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
@@ -37,8 +38,7 @@ class Send(object):
         self.grid.set_column_spacing(5)
         self.grid.set_halign(Gtk.Align.CENTER)
         self.grid.set_direction(Gtk.TextDirection.LTR)
-
-    def show_window(self):
+        
         if self.is_window_open == True:
             return
 
@@ -111,6 +111,8 @@ class Send(object):
                 _("There has been an error while sending information to the server. Please try again later"))
             
             self.window.close()
-
+        return True
+    
     def on_cancel_click(self, button):
         self.window.close()
+        return True
