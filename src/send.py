@@ -4,6 +4,7 @@ from gi.repository import Gtk, Gio, GdkPixbuf, Gdk
 
 import requests
 import subprocess
+import glob, os, json, datetime
 
 import base64
 from io import BytesIO
@@ -24,6 +25,7 @@ class Send(object):
         self.post_address = settings.get_string("ipaddress")
         print(self.post_address)
 
+    def show_window(self):
         self.window = Gtk.Window(type=Gtk.WindowType.TOPLEVEL)
         self.window.set_title(_("Send"))
         self.window.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
@@ -36,8 +38,7 @@ class Send(object):
         self.grid.set_column_spacing(5)
         self.grid.set_halign(Gtk.Align.CENTER)
         self.grid.set_direction(Gtk.TextDirection.LTR)
-
-    def show_window(self):
+        
         if self.is_window_open == True:
             return
 
@@ -45,7 +46,7 @@ class Send(object):
         self.textview.set_size_request(400, 200)
         self.textview.set_wrap_mode(Gtk.WrapMode.WORD)
         textbuffer = self.textview.get_buffer()
-        textbuffer.set_text(_("Start typing your note here"))
+        textbuffer.set_text(_(""))
 
         label = Gtk.Label(_("Note:"))
         label.set_direction(Gtk.TextDirection.LTR)
@@ -78,28 +79,30 @@ class Send(object):
             buffer = self.textview.get_buffer()
             text = buffer.get_text(buffer.get_start_iter(), buffer.get_end_iter(), False)
             print(text)
-
+ 
             hostname = controls.execute("hostname")
-            username = controls.execute("whoami")
-            ip_address = controls.execute("ip route get 1.2.3.4 | awk '{printf $7}'")
-            
-            files = {
-                "image": open(summary.MAINDIR + 'image.jpg', 'rb')
-            }
-            base64_string = ""
-            with open(summary.MAINDIR + "image.jpg", "rb") as image_file:
-                base64_string = base64.b64encode(image_file.read())
+            username = controls.execute("whoami")           
 
-            data = {
-                "base64": base64_string,
-                "note": text,
+
+            list_of_files = glob.glob(summary.MAINDIR+'ss/*')
+            latest_file = max(list_of_files, key=os.path.getctime)
+
+            data = []
+            data.append({
                 "machine_name": hostname,
-                "ip_address": ip_address,
-                "username": username
-            }
+                "username": username,
+                "note": text,
+                "filename": latest_file
+            })
+
+            with open(summary.MAINDIR + "ss/main.json", "a") as outfile:
+                json.dump(data, outfile)
+
+            file_object = open(summary.MAINDIR + "ss/main.json", 'a')
+            file_object.write("\n")
+            file_object.close()
+
             # create new script that handles all api calls
-            response = requests.post(str(self.post_address), files=files, data=data)
-            message.log_info(response.text)
 
             self.window.close()
         except Exception as e:
@@ -108,6 +111,8 @@ class Send(object):
                 _("There has been an error while sending information to the server. Please try again later"))
             
             self.window.close()
-
+        return True
+    
     def on_cancel_click(self, button):
         self.window.close()
+        return True

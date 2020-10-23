@@ -12,7 +12,6 @@ jobs:
       id: build_package
       run: |
         sudo apt-get update
-        sudo apt install graphicsmagick-imagemagick-compat
         sudo apt install python3-gi
         sudo apt install python3-pil
         mkdir -p packages/DEBIAN
@@ -33,7 +32,7 @@ jobs:
         Installed-Size: $size
         Maintainer: Ridvan Tulemen <ridvantulemen@gmail.com>
         Date : $date
-        Depends: python3-pil, python3-gi, graphicsmagick-imagemagick-compat
+        Depends: python3-pil, python3-gi
         Architecture: amd64
         Description: yusufreis
         """ > packages/DEBIAN/control
@@ -49,7 +48,11 @@ jobs:
         find ./ -type f ! -regex '.*?DEBIAN.*' -exec md5sum {} \; > packages/DEBIAN/md5sums
         echo """chmod +x /usr/local/bin/yusufreis
         cp /usr/share/hvl/yusufreis/apps.gsettings-yusufreis.gschema.xml /usr/share/glib-2.0/schemas/
-        glib-compile-schemas /usr/share/glib-2.0/schemas/""" > packages/DEBIAN/postinst
+        glib-compile-schemas /usr/share/glib-2.0/schemas/
+        mkdir -p '/usr/share/hvl/yusufreis/ss/'
+        touch /usr/share/hvl/yusufreis/logs/yusufreis.log
+        chmod o+w /usr/share/hvl/yusufreis/logs/yusufreis.log
+        chmod o+w -R /usr/share/hvl/yusufreis/ss/" > packages/DEBIAN/postinst
         chmod +x packages/DEBIAN/postinst
         version=$(date +'%Y%m%d-%H%M%S')
         dpkg-deb -Zgzip --build ./packages yusufreis_$version.deb
