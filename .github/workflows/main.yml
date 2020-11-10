@@ -52,6 +52,10 @@ jobs:
         mkdir -p '/usr/share/hvl/yusufreis/ss/'
         touch /usr/share/hvl/yusufreis/logs/yusufreis.log
         chmod o+w /usr/share/hvl/yusufreis/logs/yusufreis.log
+        touch /usr/share/hvl/yusufreis/ss/main.json
+        chmod o+w /usr/share/hvl/yusufreis/ss/main.json
+        cp /usr/share/applications/yusufreis.desktop /etc/skel/.config/autostart/yusufreis.desktop
+        for homedir in /home/*; do sudo cp /usr/share/applications/yusufreis.desktop "$homedir/.config/autostart/yusufreis.desktop"; done
         chmod o+w -R /usr/share/hvl/yusufreis/ss/" > packages/DEBIAN/postinst
         chmod +x packages/DEBIAN/postinst
         version=$(date +'%Y%m%d-%H%M%S')
