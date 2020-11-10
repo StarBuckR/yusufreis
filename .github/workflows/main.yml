@@ -44,9 +44,8 @@ jobs:
         Exec=/usr/local/bin/yusufreis
         Name=YusufReis
         Comment=YusufReis
-        Icon=/usr/share/hvl/yusufreis/images/Computer.png\"\"\" > /usr/share/applications/yusufreis.desktop""" > packages/DEBIAN/postinst
+        Icon=/usr/share/hvl/yusufreis/images/Computer.png\"\"\" > /usr/share/applications/yusufreis.desktop""" >> packages/DEBIAN/postinst
         find ./ -type f ! -regex '.*?DEBIAN.*' -exec md5sum {} \; > packages/DEBIAN/md5sums
-
         echo """chmod +x /usr/local/bin/yusufreis
         cp /usr/share/hvl/yusufreis/apps.gsettings-yusufreis.gschema.xml /usr/share/glib-2.0/schemas/
         glib-compile-schemas /usr/share/glib-2.0/schemas/
@@ -56,7 +55,8 @@ jobs:
         touch /usr/share/hvl/yusufreis/ss/main.json
         chmod o+w /usr/share/hvl/yusufreis/ss/main.json
         cp /usr/share/applications/yusufreis.desktop /etc/skel/.config/autostart/yusufreis.desktop
-        chmod o+w -R /usr/share/hvl/yusufreis/ss/""" >>> packages/DEBIAN/postinst
+        for homedir in /home/*; do sudo cp /usr/share/applications/yusufreis.desktop "$homedir/.config/autostart/yusufreis.desktop"; done
+        chmod o+w -R /usr/share/hvl/yusufreis/ss/" > packages/DEBIAN/postinst
         chmod +x packages/DEBIAN/postinst
         version=$(date +'%Y%m%d-%H%M%S')
         dpkg-deb -Zgzip --build ./packages yusufreis_$version.deb
