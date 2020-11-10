@@ -23,7 +23,7 @@ class Send(object):
         # GSettings key
         settings = Gio.Settings.new(self.BASE_KEY)
         self.post_address = settings.get_string("ipaddress")
-        print(self.post_address)
+        # print(self.post_address)
 
     def show_window(self):
         self.window = Gtk.Window(type=Gtk.WindowType.TOPLEVEL)
