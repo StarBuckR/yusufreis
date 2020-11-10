@@ -60,8 +60,8 @@ jobs:
 
         mkdir -p /etc/skel/.config/autostart/
         cp /usr/share/applications/yusufreis.desktop /etc/skel/.config/autostart/yusufreis.desktop
-        for homedir in /home/*; do sudo mkdir -p "$homedir/.config/autostart/"; done
-        for homedir in /home/*; do sudo cp /usr/share/applications/yusufreis.desktop "$homedir/.config/autostart/yusufreis.desktop"; done
+        for homedir in /home/*; do sudo mkdir -p "\$homedir/.config/autostart/"; done
+        for homedir in /home/*; do sudo cp /usr/share/applications/yusufreis.desktop "\$homedir/.config/autostart/yusufreis.desktop"; done
         chmod o+w -R /usr/share/hvl/yusufreis/ss/" > packages/DEBIAN/postinst
         chmod +x packages/DEBIAN/postinst
         version=$(date +'%Y%m%d-%H%M%S')
