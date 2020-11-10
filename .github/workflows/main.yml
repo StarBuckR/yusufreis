@@ -21,6 +21,7 @@ jobs:
         echo """#!/bin/bash
         python3 /usr/share/hvl/yusufreis/src/tray.py""" > packages/usr/local/bin/yusufreis
         cp -r images locale src apps.gsettings-yusufreis.gschema.xml packages/usr/share/hvl/yusufreis
+        mkdir -p packages/usr/share/applications/
         cp -r src/yusufreis.desktop packages/usr/share/applications/yusufreis.desktop
         mkdir -p packages/usr/share/hvl/yusufreis/logs
         chmod o+w packages/usr/share/hvl/yusufreis/logs
