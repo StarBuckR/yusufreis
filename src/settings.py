@@ -20,12 +20,10 @@ def checkConfigFiles():
         if controls.execute("cat /usr/share/palamar/palamar.conf | grep -w DomainIP | cut -d '=' -f2") == "" or\
             controls.execute("cat /usr/share/palamar/palamar.conf | grep -w Hostname | cut -d '=' -f2") == "" or\
             controls.execute("cat /usr/share/palamar/palamar.conf | grep -w DomainUsername | cut -d '=' -f2") == "":
-            print("f2")
             return False
     else:
-        print("f")
         return False
-    print("true")
+        
     return True
 
 class Settings(object):
@@ -146,3 +144,4 @@ class Settings(object):
     def on_leave_button_clicked(self, button):
         print(self.local_username_entry.get_text())
         print(self.local_pass_entry.get_text())
+        

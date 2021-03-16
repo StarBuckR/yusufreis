@@ -6,7 +6,7 @@ from gi.repository import Gtk, GLib
 
 from PIL import Image 
 
-import send, message, summary, controls, notifications, settings, loading
+import send, message, summary, network, controls, notifications, settings, loading
 import subprocess, gettext, sys, os
 import datetime
 
@@ -20,6 +20,7 @@ summary_window = ""
 controls_window = ""
 notifications_window = ""
 settings_window = ""
+network_window = ""
 
 class TrayIcon(Gtk.StatusIcon):
     def __init__(self):
@@ -44,6 +45,10 @@ class TrayIcon(Gtk.StatusIcon):
 
         self.menu_item1 = Gtk.MenuItem(label=_("Summary"))
         self.menu_item1.connect("activate", self.on_summary_click)
+        self.menu.append(self.menu_item1)
+
+        self.menu_item1 = Gtk.MenuItem(label=_("Network"))
+        self.menu_item1.connect("activate", self.on_network_click)
         self.menu.append(self.menu_item1)
 
         self.menu_item1 = Gtk.MenuItem(label=_("Controls"))
@@ -92,6 +97,15 @@ class TrayIcon(Gtk.StatusIcon):
 
         loading_window.destroy()
     
+    def on_network_click(self, button):
+        loading_window = loading.Loading()
+        while Gtk.events_pending():
+            Gtk.main_iteration()
+
+        network_window.show_window()
+
+        loading_window.destroy()
+    
     def on_controls_click(self, button):
         loading_window = loading.Loading()
         while Gtk.events_pending():
@@ -130,6 +144,7 @@ if __name__ == '__main__':
     notifications_window = notifications.Notifications()
     summary_window = summary.Summary()
     send_window = send.Send()
+    network_window = network.Network()
     controls_window = controls.Controls()
     settings_window = settings.Settings()
 

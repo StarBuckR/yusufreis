@@ -1,4 +1,4 @@
-# Projectx
+# Yusufreis
 <p align="center">
     <img src="https://raw.githubusercontent.com/aciklab/yusufreis/master/screenshots/Summary.png">    
 </p>
@@ -19,7 +19,7 @@ Run with default language
 yusufreis
 ```
 
-Run with spesific language
+Run with a spesific language
 
 ```
 LANGUAGE=tr yusufreis

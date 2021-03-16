@@ -43,6 +43,7 @@ def execute(command):
     except Exception as e:
         message.log_error("Exception occurred")
         return("")
+
 def executeWithoutTimeout(command):
     try:
         proc = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True)
@@ -55,6 +56,7 @@ def executeWithoutTimeout(command):
     except Exception as e:
         message.log_error("Exception occurred")
         return("")
+
 def getUsername():
     return execute("whoami")
 
@@ -217,3 +219,4 @@ class Controls(object):
 
     def on_delete_event(self, control, button):
         self.is_window_open = False
+        
