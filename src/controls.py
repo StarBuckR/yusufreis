@@ -31,9 +31,9 @@ el = gettext.translation('base', 'locale', fallback=True)
 el.install()
 _ = el.gettext
 
-def execute(command):
+def execute(command, environment=None):
     try:
-        proc = subprocess.Popen("timeout " + BASHTIMEOUT + " " + command, stdout=subprocess.PIPE, shell=True)
+        proc = subprocess.Popen("timeout " + BASHTIMEOUT + " " + command, stdout=subprocess.PIPE, shell=True, env=environment)
         (dist, err) = proc.communicate()
         dist = dist.decode('UTF-8')
         if(dist == ""):

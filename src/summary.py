@@ -17,7 +17,7 @@ import subprocess
 
 import gettext
 import locale
-import controls
+import controls, network
 import socket
 
 el = gettext.translation('base', 'locale', fallback=True)
@@ -29,6 +29,11 @@ MAINDIR = "/usr/share/hvl/yusufreis/"
 ICONDomain = os.path.join(MAINDIR+"images/", 'Domain.png')
 ICONLocal = os.path.join(MAINDIR+"images/", 'Local.png')
 ICONComputer = os.path.join(MAINDIR+"images/", 'Computer.png')
+
+def create_network_window_with_root_privilege():
+    curr_env = os.environ.copy()
+    curr_env["PATH"] = CURRDIR + curr_env["PATH"]
+    controls.execute("pkexec exec-in-dir " + CURRDIR + "python3 src/network.py")
 
 def getDomain():
     return controls.execute("net ads info 2> /dev/null | grep Realm | cut -d':' -f2 | tr -d ' ' | tr -d '\n'")
