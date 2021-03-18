@@ -22,7 +22,9 @@ el = gettext.translation('base', 'locale', fallback=True)
 el.install()
 _ = el.gettext
 
-INTERFACE_DIRECTORY = "/usr/share/hvlcert/"
+INTERFACE_CONF_DIRECTORY = "/usr/share/hvlcert/"
+INTERFACES_DIRECTORY = "/etc/network/interfaces.d/"
+SWITCHER_DIRECTORY = "/usr/share/hvlcert/"
 
 def get_ip_address(interface_name):
     ip_address = controls.execute("ip a | grep " + interface_name + " | grep inet")
@@ -40,23 +42,23 @@ def is_interface_up(interface_name):
     return returned_value if returned_value != "" else False
 
 def is_interface_configured(interface_name):
-    returned_value = controls.execute("cat /etc/network/interfaces | grep wpa_" + interface_name.strip()  + ".conf")
+    returned_value = controls.execute("cat " + INTERFACES_DIRECTORY + interface_name.strip() + " | grep wpa_" + interface_name.strip()  + ".conf")
     return True if returned_value != "" else False
 
 def is_interface_exists(interface_name):
     return True if controls.execute("ip link show | grep " + interface_name) else False
 
 def get_ssid(name):
-    return controls.execute("cat " + INTERFACE_DIRECTORY + "wpa_" + name + ".conf | grep 'ssid' | awk -F '=' '{print $2}' | awk -F '\"' '{print $2}'")
+    return controls.execute("cat " + INTERFACE_CONF_DIRECTORY + "wpa_" + name + ".conf | grep 'ssid' | awk -F '=' '{print $2}' | awk -F '\"' '{print $2}'")
 
 def get_domain_suffix_match(name):
-    return controls.execute("cat " + INTERFACE_DIRECTORY + "wpa_" + name + ".conf | grep 'domain_suffix_match' | awk -F '=' '{print $2}'")
+    return controls.execute("cat " + INTERFACE_CONF_DIRECTORY + "wpa_" + name + ".conf | grep 'domain_suffix_match' | awk -F '=' '{print $2}'")
 
 def get_identity(name):
-    return controls.execute("cat " + INTERFACE_DIRECTORY + "wpa_" + name + ".conf | grep 'identity' | awk -F '=' '{print $2}'")
+    return controls.execute("cat " + INTERFACE_CONF_DIRECTORY + "wpa_" + name + ".conf | grep 'identity' | awk -F '=' '{print $2}'")
 
 def get_if_identity_is_user(name):
-    returned_value = controls.execute("cat " + INTERFACE_DIRECTORY + "wpa_" + name + ".conf | grep 'identity' | grep host")
+    returned_value = controls.execute("cat " + INTERFACE_CONF_DIRECTORY + "wpa_" + name + ".conf | grep 'identity' | grep host")
     return False if returned_value != "" else True
 
 def get_working_ethernets():
@@ -86,9 +88,10 @@ class Network(object):
         separator = Gtk.Separator()
         self.grid.attach(separator, 0, 0, 4, 1)
         
-        for interface in get_interfaces().split("\n"):
-            if interface.startswith(("w", "e")) and is_interface_configured(interface): #and is_interface_exists(interface):
-                if is_interface_up(interface):
+        for filename in os.listdir(INTERFACES_DIRECTORY):
+            if filename.startswith(("w", "e")) and is_interface_configured(filename) and is_interface_exists(filename):
+                if is_interface_up(filename):
+                    interface = filename
                     label_a = summary.create_label_and_attach(self.grid, interface, _("Interface Name: "), separator)
                     label_a = summary.create_label_and_attach(self.grid, get_ip_address(interface), _("IP Address: "), label_a)
                     label_a = summary.create_label_and_attach(self.grid, get_ssid(interface), _("ssid: "), label_a)
@@ -177,10 +180,10 @@ class Network(object):
     def switch_network_interface(self, button, active):
         if self.switch.get_active():
             #print(controls.execute("pkexec echo Enabled"))
-            controls.execute("pkexec switcher -a e -i " + self.combobox.get_active_text())
+            controls.execute("pkexec " + SWITCHER_DIRECTORY + "switcher.sh -a -e -i " + self.combobox.get_active_text())
         else:
             #print(controls.execute("pkexec echo Disabled"))
-            controls.execute("pkexec switcher -a d -i " + self.combobox.get_active_text())
+            controls.execute("pkexec " + SWITCHER_DIRECTORY + "switcher.sh -a -d -i " + self.combobox.get_active_text())
         
     def reconfigure_switch(self, name):
         # these block contains a little workaround to not emit a signal when changing 
