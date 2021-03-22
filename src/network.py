@@ -16,7 +16,7 @@ import subprocess
 
 import gettext
 import locale
-import summary, controls, certificate
+import summary, controls, certificate, interface_details, message
 
 el = gettext.translation('base', 'locale', fallback=True)
 el.install()
@@ -25,6 +25,7 @@ _ = el.gettext
 INTERFACE_CONF_DIRECTORY = "/usr/share/hvlcert/"
 INTERFACES_DIRECTORY = "/etc/network/interfaces.d/"
 SWITCHER_DIRECTORY = "/usr/share/hvlcert/"
+WPA_CLI_DIRECTORY = "/usr/sbin/wpa_cli"
 
 def get_ip_address(interface_name):
     ip_address = controls.execute("ip a | grep " + interface_name + " | grep inet")
@@ -85,47 +86,9 @@ class Network(object):
         if self.is_window_open == True:
             return
 
-        separator = Gtk.Separator()
-        self.grid.attach(separator, 0, 0, 4, 1)
-        
-        for filename in os.listdir(INTERFACES_DIRECTORY):
-            if filename.startswith(("w", "e")) and is_interface_configured(filename) and is_interface_exists(filename):
-                if is_interface_up(filename):
-                    interface = filename
-                    label_a = summary.create_label_and_attach(self.grid, interface, _("Interface Name: "), separator)
-                    label_a = summary.create_label_and_attach(self.grid, get_ip_address(interface), _("IP Address: "), label_a)
-                    label_a = summary.create_label_and_attach(self.grid, get_ssid(interface), _("ssid: "), label_a)
-                    label_a = summary.create_label_and_attach(self.grid, get_domain_suffix_match(interface), _("Domain Suffix Match: "), label_a)
-                    label_a = summary.create_label_and_attach(self.grid, get_identity(interface), _("Identity: "), label_a)
-                else:
-                    label_a = summary.create_label_and_attach(self.grid, interface, _("Interface Name: "), separator)
-                    label_down = Gtk.Label(label=("<b> <span color='red'> " + _("Interface is DOWN, Click to elevate") + "</span> </b>"), use_markup=True)
-                    label_down.set_halign(Gtk.Align.CENTER)
-                    down_button = Gtk.Button(label=_("Interface is DOWN, click to elevate"))
-                    down_button.connect("clicked", self.on_down_button_clicked, interface)
+        # created this function to be able to refresh window when interface is changed
+        self.recreate_window()
 
-                    pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(
-                        filename=summary.ICONLocal,
-                        width=36,
-                        height=36,
-                        preserve_aspect_ratio=True)
-
-                    image1 = Gtk.Image.new_from_pixbuf(pixbuf)
-
-                    self.grid.attach_next_to(image1, label_a, Gtk.PositionType.BOTTOM, 4, 2)
-                    self.grid.attach_next_to(down_button, image1, Gtk.PositionType.BOTTOM, 4, 1)
-                    
-                    # must do this in order to separator to not break and collide with "down" label
-                    label_a = down_button
-
-                separator = Gtk.Separator()
-                self.grid.attach_next_to(separator, label_a, Gtk.PositionType.BOTTOM, 4, 2)
-
-        self.advanced_button = Gtk.Button(label=_("Advanced Settings"))
-        self.advanced_button.set_size_request(80, 30)
-        self.advanced_button.connect("clicked", self.on_advanced_clicked)
-        self.grid.attach_next_to(self.advanced_button, separator, Gtk.PositionType.BOTTOM, 4, 2)
-        
         self.window.set_icon_from_file(summary.ICONDomain)
         self.window.connect('delete-event', self.on_delete_event)
         self.is_window_open = True
@@ -185,6 +148,8 @@ class Network(object):
             #print(controls.execute("pkexec echo Disabled"))
             controls.execute("pkexec " + SWITCHER_DIRECTORY + "switcher.sh -a -d -i " + self.combobox.get_active_text())
         
+        self.recreate_window()
+
     def reconfigure_switch(self, name):
         # these block contains a little workaround to not emit a signal when changing 
         # switch's current state by simply blocking and unblocking emit handler
@@ -197,5 +162,73 @@ class Network(object):
             self.switch.set_state(False)
             self.switch.handler_unblock(self.switch_handler_id)
 
+    def on_details_button_clicked(self, button, interface_name):
+        details = controls.execute("pkexec " + WPA_CLI_DIRECTORY + " -i " + interface_name + " status")
+        if not details:
+            message_window = message.MessageDialogWindow()
+            message_window.error_dialog(_("Error"), _("Couldn't find interface status with wpa_cli"))
+            return
+        
+        interface_details_window = interface_details.InterfaceDetails()
+        interface_details_window.create_and_show_window(details)
+
+    def recreate_window(self):
+        while True:
+            if self.grid.get_child_at(0,1)!= None:
+                self.grid.remove_row(1)
+            else:
+                break
+
+        separator = Gtk.Separator()
+        self.grid.attach(separator, 0, 0, 4, 1)
+        
+        for filename in os.listdir(INTERFACES_DIRECTORY):
+            if filename.startswith(("w", "e")) and is_interface_configured(filename) and is_interface_exists(filename):
+                interface = filename
+                if is_interface_up(filename):
+                    label_a = summary.create_label_and_attach(self.grid, interface, _("Interface Name: "), separator)
+                    label_a = summary.create_label_and_attach(self.grid, get_ip_address(interface), _("IP Address: "), label_a)
+                    label_a = summary.create_label_and_attach(self.grid, get_ssid(interface), _("ssid: "), label_a)
+                    label_a = summary.create_label_and_attach(self.grid, get_domain_suffix_match(interface), _("Domain Suffix Match: "), label_a)
+                    label_a = summary.create_label_and_attach(self.grid, get_identity(interface), _("Identity: "), label_a)
+
+                    details_button = Gtk.Button(label=_("Interface Details"))
+                    details_button.connect("clicked", self.on_details_button_clicked, interface)
+                    self.grid.attach_next_to(details_button, label_a, Gtk.PositionType.BOTTOM, 4, 2)
+                    
+                    # must do this in order to separator to not break and collide with button
+                    label_a = details_button
+                else:
+                    label_a = summary.create_label_and_attach(self.grid, interface, _("Interface Name: "), separator)
+                    label_down = Gtk.Label(label=("<b> <span color='red'> " + _("Interface is DOWN, Click to elevate") + "</span> </b>"), use_markup=True)
+                    label_down.set_halign(Gtk.Align.CENTER)
+                    down_button = Gtk.Button(label=_("Interface is DOWN, click to elevate"))
+                    down_button.connect("clicked", self.on_down_button_clicked, interface)
+
+                    pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(
+                        filename=summary.ICONLocal,
+                        width=36,
+                        height=36,
+                        preserve_aspect_ratio=True)
+
+                    image1 = Gtk.Image.new_from_pixbuf(pixbuf)
+
+                    self.grid.attach_next_to(image1, label_a, Gtk.PositionType.BOTTOM, 4, 2)
+                    self.grid.attach_next_to(down_button, image1, Gtk.PositionType.BOTTOM, 4, 1)
+                    
+                    # must do this in order to separator to not break and collide with "down" label
+                    label_a = down_button
+
+                separator = Gtk.Separator()
+                self.grid.attach_next_to(separator, label_a, Gtk.PositionType.BOTTOM, 4, 2)
+
+        self.advanced_button = Gtk.Button(label=_("Advanced Settings"))
+        self.advanced_button.set_size_request(80, 30)
+        self.advanced_button_handler_id = self.advanced_button.connect("clicked", self.on_advanced_clicked)
+        self.grid.attach_next_to(self.advanced_button, separator, Gtk.PositionType.BOTTOM, 4, 2)
+        
+        self.is_advanced_open = False
+        self.window.show_all()
+        
     def on_delete_event(self, control, button):
         self.is_window_open = False
