@@ -30,31 +30,26 @@ ICONDomain = os.path.join(MAINDIR+"images/", 'Domain.png')
 ICONLocal = os.path.join(MAINDIR+"images/", 'Local.png')
 ICONComputer = os.path.join(MAINDIR+"images/", 'Computer.png')
 
-def create_network_window_with_root_privilege():
-    curr_env = os.environ.copy()
-    curr_env["PATH"] = CURRDIR + curr_env["PATH"]
-    controls.execute("pkexec exec-in-dir " + CURRDIR + "python3 src/network.py")
-
-def getDomain():
+def get_domain():
     return controls.execute("net ads info 2> /dev/null | grep Realm | cut -d':' -f2 | tr -d ' ' | tr -d '\n'")
 
-def getWorkgroup():
+def get_workgroup():
     return controls.execute("net ads workgroup | cut -d':' -f2 | tr -d ' ' | tr -d '\n'")
 
-def getHostname():
+def get_hostname():
     return controls.execute("hostname | tr -d '\n'")
 
-def getCPU():
+def get_CPU():
     cpumodel = controls.execute("lscpu | grep 'Model name:' | cut -d':' -f2 | sed -e 's/^[[:space:]]*//'| tr -d '\n'")
     cpucore = controls.execute("lscpu | grep '^CPU(s):' | cut -d':' -f2 | sed -e 's/^[[:space:]]*//'| tr -d '\n'")
     return(cpumodel + " - " + cpucore)
 
-def getRAM():
+def get_RAM():
     memory = controls.execute("awk '/MemTotal/ {print $2}' /proc/meminfo")
     memory = round(int(memory)/1024/1000, 2)
     return(str(memory)+" GB")
 
-def getDist():
+def get_distro():
     return controls.execute("lsb_release -ir | cut -d':' -f2| sed -e 's/^[[:space:]]*//'| tr '\n' ' '")
 
 def create_label_and_attach(grid, label_text, label_a_text, attach_next_to):
@@ -92,11 +87,11 @@ class Summary(object):
         if self.is_window_open == True:
             return
 
-        label1 = Gtk.Label(label=("<b>"+getHostname()+"</b>"), use_markup=True)
+        label1 = Gtk.Label(label=("<b>"+get_hostname()+"</b>"), use_markup=True)
         label1.set_halign(Gtk.Align.CENTER)
         self.grid.attach(label1, 0, 0, 4, 1)
 
-        if (getDomain() != ""):
+        if (get_domain() != ""):
             pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(
                 filename=ICONDomain,
                 width=96,
@@ -115,19 +110,19 @@ class Summary(object):
         separator1 = Gtk.Separator()
         self.grid.attach_next_to(separator1, image1, Gtk.PositionType.BOTTOM, 4, 2)
 
-        label_a = create_label_and_attach(self.grid, getDist(), _("OS:"), separator1)
-        label_a = create_label_and_attach(self.grid, getCPU(), _("CPU:"), label_a)
-        label_a = create_label_and_attach(self.grid, getRAM(), _("RAM:"), label_a)
+        label_a = create_label_and_attach(self.grid, get_distro(), _("OS:"), separator1)
+        label_a = create_label_and_attach(self.grid, get_CPU(), _("CPU:"), label_a)
+        label_a = create_label_and_attach(self.grid, get_RAM(), _("RAM:"), label_a)
 
         separator = Gtk.Separator()
         self.grid.attach_next_to(separator, label_a, Gtk.PositionType.BOTTOM, 4, 2)
 
-        domain = getDomain()
+        domain = get_domain()
         if(domain == ""):
             domain = _("Domain could not found")
             workgroup = ""
         else:
-            workgroup = getWorkgroup()
+            workgroup = get_workgroup()
 
         label_a = create_label_and_attach(self.grid, domain, _("Domain:"), separator)
         

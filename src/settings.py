@@ -57,7 +57,7 @@ class Settings(object):
         button_label = ""
         label = ""
         is_in_domain = False
-        if (summary.getDomain() != ""):
+        if (summary.get_domain() != ""):
             is_in_domain = True
             label = _("Machine is in domain")
             button_label = _("Leave Domain")
@@ -135,7 +135,7 @@ class Settings(object):
         command = "pkexec sudo -S palamar -hostname '" + hostname + "' -domain_ip '" + domain_ip\
             + "' -username '" + domain_username + "' -password '" + password + "'"
         
-        output = controls.executeWithoutTimeout(command)
+        output = controls.execute_without_timeout(command)
         if output != "":
             message.MessageDialogWindow().question_reboot_dialog()
         else:

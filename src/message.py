@@ -89,7 +89,7 @@ class MessageDialogWindow(Gtk.Window):
         )
         response = dialog.run()
         if response == Gtk.ResponseType.YES:
-            controls.executeWithoutTimeout("systemctl reboot -i")
+            controls.execute_without_timeout("systemctl reboot -i")
         elif response == Gtk.ResponseType.NO:
             print("QUESTION dialog closed by clicking NO button")
 

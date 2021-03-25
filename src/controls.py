@@ -44,7 +44,7 @@ def execute(command, environment=None):
         message.log_error("Exception occurred")
         return("")
 
-def executeWithoutTimeout(command):
+def execute_without_timeout(command):
     try:
         proc = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True)
         (dist, err) = proc.communicate()
@@ -57,28 +57,28 @@ def executeWithoutTimeout(command):
         message.log_error("Exception occurred")
         return("")
 
-def getUsername():
+def get_username():
     return execute("whoami")
 
-def getBaseDir():
-    return execute("getent passwd " + getUsername() + " | awk -F: ' { print $6} '")
+def get_base_dir():
+    return execute("getent passwd " + get_username() + " | awk -F: ' { print $6} '")
 
-def getDomainName():
+def get_domain_name():
     return execute("dnsdomainname")
 
-def getPing():
-    return execute("ping -c 1 " + getDomainName())
+def get_ping():
+    return execute("ping -c 1 " + get_domain_name())
 
-def getHost():
-    return execute("host " + getDomainName())
+def get_host():
+    return execute("host " + get_domain_name())
 
-def getKlist():
+def get_klist():
     return execute("klist")
 
-def getLDAP():
+def get_LDAP():
     return execute("net ads info 2>/dev/null | grep 'LDAP server name' | awk -F: '{print $2}'")
 
-def getNTPTime(host):
+def get_NTP_time(host):
     try:
         port = 123
         buf = 1024
@@ -98,15 +98,15 @@ def getNTPTime(host):
         message.log_error(("Could not fetch time from NTP server"))
         return _("Fail")
 
-def getClientTime():
+def get_client_time():
     return execute("date +'%a %b %d %T %Y'")
 
-def getSssd():
+def get_sssd():
     return execute("systemctl is-active sssd.service")
-def getSmbd():
+def get_smbd():
     return execute("systemctl is-active smbd.service")
 
-def getPam():
+def get_pam():
     return execute("cat /etc/pam.d/common-session | grep  'session required pam_mkhomedir.so skel=/etc/skel umask=0077'")
 
 class Controls(object):
@@ -130,31 +130,31 @@ class Controls(object):
         if self.is_window_open == True:
             return
         
-        label1 = Gtk.Label(label=("<b>" + summary.getHostname() + "</b>"), use_markup=True)
+        label1 = Gtk.Label(label=("<b>" + summary.get_hostname() + "</b>"), use_markup=True)
         label1.set_halign(Gtk.Align.CENTER)
 
         separator = Gtk.Separator()
         self.grid.attach(label1, 0, 0, 4, 1)
         self.grid.attach_next_to(separator, label1, Gtk.PositionType.BOTTOM, 4, 2)
         
-        label_a = summary.create_label_and_attach(self.grid, getUsername(), _("Username: "), separator)
-        label_a = summary.create_label_and_attach(self.grid, getBaseDir(), _("Getent control: "), label_a)
+        label_a = summary.create_label_and_attach(self.grid, get_username(), _("Username: "), separator)
+        label_a = summary.create_label_and_attach(self.grid, get_base_dir(), _("Getent control: "), label_a)
 
-        domainname = getDomainName()
+        domainname = get_domain_name()
         if domainname != "":
             pass
         else:
             domainname = _("Fail")
         label_a = summary.create_label_and_attach(self.grid, domainname, _("Domain control: "), label_a)
 
-        can_ping = getPing()
+        can_ping = get_ping()
         if(can_ping != ""):
             can_ping = _("Success")
         else:
             can_ping = _("Fail")
         label_a = summary.create_label_and_attach(self.grid, can_ping, _("Ping control: "), label_a)
 
-        can_host = getHost()
+        can_host = get_host()
         if(can_host != ""):
             can_host = _("Success")
         else:
@@ -167,7 +167,7 @@ class Controls(object):
         else:
             message.log_info("klist found")
 
-        klist = getKlist()
+        klist = get_klist()
         if(("no credentials cache found" in klist) or (klist == "")):
             klist = _("Fail")
         else:
@@ -180,7 +180,7 @@ class Controls(object):
         else:
             message.log_info("pam found")
 
-        pam = getPam()
+        pam = get_pam()
         if(klist == ""):
             pam = _("Fail")
         else:
@@ -190,13 +190,13 @@ class Controls(object):
         separator = Gtk.Separator()
         self.grid.attach_next_to(separator, label_a, Gtk.PositionType.BOTTOM, 4, 2)
 
-        label_a = summary.create_label_and_attach(self.grid, getNTPTime(getLDAP()), _("DC time: "), separator)
-        label_a = summary.create_label_and_attach(self.grid, getClientTime(), _("Client time: "), label_a)
+        label_a = summary.create_label_and_attach(self.grid, get_NTP_time(get_LDAP()), _("DC time: "), separator)
+        label_a = summary.create_label_and_attach(self.grid, get_client_time(), _("Client time: "), label_a)
 
         separator = Gtk.Separator()
         self.grid.attach_next_to(separator, label_a, Gtk.PositionType.BOTTOM, 4, 2)
 
-        sssd = getSssd()
+        sssd = get_sssd()
         if sssd == "active":
             sssd = _("Active")
         else:
@@ -204,7 +204,7 @@ class Controls(object):
         label_a = summary.create_label_and_attach(self.grid, sssd, _("Sssd service control: "), separator
         )
 
-        smbd = getSmbd()
+        smbd = get_smbd()
         if smbd == "active":
             smbd = _("Active")
         else:
